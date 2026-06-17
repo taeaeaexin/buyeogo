@@ -4,6 +4,7 @@ type ValueCardProps = {
   index: string
   title: string
   description: string
+  icon: IconName
 }
 
 type CoursePreviewCardProps = {
@@ -15,24 +16,37 @@ type CoursePreviewCardProps = {
   imageAlt: string
 }
 
+type IconName =
+  | 'route'
+  | 'map'
+  | 'message'
+  | 'coin'
+  | 'store'
+  | 'handshake'
+  | 'home'
+  | 'leaf'
+
 const values: ValueCardProps[] = [
   {
     index: '01',
     title: '코스 추천',
     description:
       '당일치기, 1박2일, 가족 여행처럼 상황에 맞는 부여 여행 코스를 준비합니다.',
+    icon: 'route',
   },
   {
     index: '02',
     title: '로컬 장소',
     description:
       '궁남지, 정림사지, 부소산성 같은 대표 명소부터 맛집, 카페, 숙소까지 정리합니다.',
+    icon: 'map',
   },
   {
     index: '03',
     title: '예약 문의',
     description:
       '추후 숙소, 체험, 로컬 투어 문의를 간단히 남길 수 있도록 확장합니다.',
+    icon: 'message',
   },
 ]
 
@@ -64,14 +78,77 @@ const courses: CoursePreviewCardProps[] = [
 ]
 
 const benefitItems = [
-  '사용 가능 매장 표시',
-  '지역 혜택 안내',
-  '제휴 매장 신청',
-  '공식 협의 후 연동 검토',
+  { label: '사용 가능 매장 표시', icon: 'store' },
+  { label: '지역 혜택 안내', icon: 'coin' },
+  { label: '제휴 매장 신청', icon: 'handshake' },
+  { label: '공식 협의 후 연동 검토', icon: 'leaf' },
+] satisfies Array<{ label: string; icon: IconName }>
+
+const heroMarks = [
+  '백제의 결',
+  '강과 연꽃',
+  '로컬 코스',
 ]
 
 function showReadyMessage(message: string) {
   window.alert(message)
+}
+
+function Icon({ name }: { name: IconName }) {
+  return (
+    <svg className="app-icon" viewBox="0 0 24 24" aria-hidden="true">
+      {name === 'route' && (
+        <>
+          <path d="M6 18c3.8-5.3 8.2-6.7 12-12" />
+          <circle cx="6" cy="18" r="2.4" />
+          <circle cx="18" cy="6" r="2.4" />
+        </>
+      )}
+      {name === 'map' && (
+        <>
+          <path d="M4.5 7.2 9 5l6 2.2 4.5-2.2v11.8L15 19l-6-2.2-4.5 2.2V7.2Z" />
+          <path d="M9 5v11.8M15 7.2V19" />
+        </>
+      )}
+      {name === 'message' && (
+        <>
+          <path d="M5 6.5h14v9.2H9.4L5 19.2V6.5Z" />
+          <path d="M8.3 10h7.4M8.3 13h4.8" />
+        </>
+      )}
+      {name === 'coin' && (
+        <>
+          <circle cx="12" cy="12" r="7.4" />
+          <path d="M9.2 10.1c.6-1 1.5-1.5 2.8-1.5 1.9 0 3 1 3 2.4 0 1.8-1.6 2.4-3 2.4-1.9 0-3 .7-3 2h6" />
+        </>
+      )}
+      {name === 'store' && (
+        <>
+          <path d="M5 10.5h14l-1.2-5H6.2L5 10.5Z" />
+          <path d="M6.5 10.5v7.8h11v-7.8M9.4 18.3v-4.7h5.2v4.7" />
+        </>
+      )}
+      {name === 'handshake' && (
+        <>
+          <path d="M8.2 12.4 11 9.7a2.4 2.4 0 0 1 3.3 0l1.5 1.4" />
+          <path d="m5 12.2 4.9 4.6a2 2 0 0 0 2.7 0l5.9-5.4" />
+          <path d="m16.5 8.2 2.6 2.7M4.9 10.9l2.7-2.7" />
+        </>
+      )}
+      {name === 'home' && (
+        <>
+          <path d="M4.8 11.4 12 5.3l7.2 6.1" />
+          <path d="M7.1 10.2v8.1h9.8v-8.1" />
+        </>
+      )}
+      {name === 'leaf' && (
+        <>
+          <path d="M18.6 5.4C11 5.2 6.4 9.2 6.2 16.6c7.3.2 11.3-4.5 12.4-11.2Z" />
+          <path d="M6.4 16.4c3.1-3.3 6.1-5.6 9.7-7.3" />
+        </>
+      )}
+    </svg>
+  )
 }
 
 function Header() {
@@ -132,6 +209,7 @@ function HeroSection() {
           </p>
           <div className="hero-actions">
             <button className="primary-button" type="button" onClick={scrollToCourses}>
+              <Icon name="route" />
               추천 코스 미리보기
             </button>
             <button
@@ -139,8 +217,14 @@ function HeroSection() {
               type="button"
               onClick={() => showReadyMessage('예약 문의 기능은 곧 추가될 예정입니다.')}
             >
+              <Icon name="message" />
               예약 문의 준비중
             </button>
+          </div>
+          <div className="hero-mark-row" aria-label="부여GO 키워드">
+            {heroMarks.map((mark) => (
+              <span key={mark}>{mark}</span>
+            ))}
           </div>
         </div>
         <aside className="hero-panel" aria-label="부여GO 준비 기능">
@@ -159,10 +243,15 @@ function HeroSection() {
   )
 }
 
-function ValueCard({ index, title, description }: ValueCardProps) {
+function ValueCard({ index, title, description, icon }: ValueCardProps) {
   return (
     <article className="value-card">
-      <span>{index}</span>
+      <div className="value-card-top">
+        <span>{index}</span>
+        <span className="icon-badge">
+          <Icon name={icon} />
+        </span>
+      </div>
       <h3>{title}</h3>
       <p>{description}</p>
     </article>
@@ -210,17 +299,20 @@ function GoodtraeNotice() {
           <h2>굿뜨래페이·지역 혜택은 준비중</h2>
         </div>
         <div className="notice-copy">
-        <p>
-          <span>부여GO는 향후 굿뜨래페이 사용 가능 매장 정보와</span>
-          <span>지역 혜택 안내를 제공할 수 있도록 준비하고 있습니다.</span>
-        </p>
-        <p className="caution-note">
-          <span>현재는 공식 협의 전 단계이므로</span>
-          <span>결제 기능이나 공식 연동 기능은 제공하지 않습니다.</span>
-        </p>
+          <p>
+            <span>부여GO는 향후 굿뜨래페이 사용 가능 매장 정보와</span>
+            <span>지역 혜택 안내를 제공할 수 있도록 준비하고 있습니다.</span>
+          </p>
+          <p className="caution-note">
+            <span>현재는 공식 협의 전 단계이므로</span>
+            <span>결제 기능이나 공식 연동 기능은 제공하지 않습니다.</span>
+          </p>
           <ul className="benefit-list">
             {benefitItems.map((item) => (
-              <li key={item}>{item}</li>
+              <li key={item.label}>
+                <Icon name={item.icon} />
+                {item.label}
+              </li>
             ))}
           </ul>
         </div>
@@ -233,6 +325,9 @@ function PartnerNotice() {
   return (
     <section className="partner-section section-band" id="partner">
       <div className="section-inner partner-panel">
+        <span className="partner-icon">
+          <Icon name="handshake" />
+        </span>
         <p className="section-eyebrow">로컬 파트너</p>
         <h2>부여의 가게와 체험을 소개할 준비도 하고 있어요</h2>
         <p>
@@ -244,6 +339,7 @@ function PartnerNotice() {
           type="button"
           onClick={() => showReadyMessage('제휴 신청 기능은 다음 단계에서 추가될 예정입니다.')}
         >
+          <Icon name="store" />
           제휴 신청 준비중
         </button>
       </div>
@@ -284,15 +380,19 @@ function BottomNavigation() {
   return (
     <nav className="bottom-nav" aria-label="준비중인 주요 메뉴">
       <button type="button" aria-current="page">
+        <Icon name="home" />
         홈
       </button>
       <button type="button" onClick={() => showReadyMessage('코스 기능은 곧 추가될 예정입니다.')}>
+        <Icon name="route" />
         코스
       </button>
       <button type="button" onClick={() => showReadyMessage('장소 기능은 곧 추가될 예정입니다.')}>
+        <Icon name="map" />
         장소
       </button>
       <button type="button" onClick={() => showReadyMessage('문의 기능은 곧 추가될 예정입니다.')}>
+        <Icon name="message" />
         문의
       </button>
     </nav>
