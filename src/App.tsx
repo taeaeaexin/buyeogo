@@ -1,155 +1,99 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-type IconName =
-  | 'arrowLeft'
-  | 'arrowRight'
-  | 'calendar'
-  | 'home'
-  | 'map'
-  | 'message'
-  | 'route'
-  | 'store'
-
-type Slide = {
+type Scene = {
+  index: string
+  era: string
   title: string
-  subtitle: string
-  location: string
+  titleEn: string
+  description: string
   image: string
-  imageAlt: string
-  objectPosition?: string
+  alt: string
+  position: string
   credit: string
 }
 
-const slides: Slide[] = [
+const scenes: Scene[] = [
   {
-    title: '물 위에 머문\n백제의 여름',
-    subtitle: '연꽃과 버드나무 사이로 천천히 걷는 궁남지',
-    location: '궁남지',
+    index: 'I',
+    era: 'SABI · 538',
+    title: '강 위에 세운\n마지막 수도',
+    titleEn: 'The last capital, raised beside the river.',
+    description: '백마강의 물길을 따라 백제는 가장 우아한 마지막 장을 열었습니다.',
+    image: '/buyeo-assets/slide-busosanseong.jpg',
+    alt: '낙화암에서 내려다본 백마강과 부여의 산세',
+    position: 'center 48%',
+    credit: 'travel oriented · CC BY-SA 2.0',
+  },
+  {
+    index: 'II',
+    era: 'GUNGNAMJI · 634',
+    title: '물 위에 머문\n백제의 정원',
+    titleEn: 'A garden where Baekje still lingers.',
+    description: '버드나무와 연꽃, 포룡정 사이를 걸으며 오래된 왕도의 숨을 만납니다.',
     image: '/buyeo-assets/slide-gungnamji.jpg',
-    imageAlt: '버드나무와 포룡정이 어우러진 부여 궁남지 전경',
-    objectPosition: 'center 52%',
+    alt: '버드나무와 포룡정이 어우러진 궁남지 풍경',
+    position: 'center 53%',
     credit: 'Frankhöffner · CC BY-SA 3.0',
   },
   {
-    title: '백마강이 펼쳐지는\n부여의 가장 높은 시선',
-    subtitle: '낙화암에서 강과 산이 이어지는 풍경을 만납니다',
-    location: '부소산성 · 낙화암',
-    image: '/buyeo-assets/slide-busosanseong.jpg',
-    imageAlt: '낙화암에서 내려다본 백마강과 주변 산세',
-    objectPosition: 'center 48%',
-    credit: 'travel oriented · CC BY-SA 2.0',
-  },
-  {
-    title: '돌에 새겨진\n백제의 고요한 시간',
-    subtitle: '한 자리에서 천 년을 견딘 정림사지 오층석탑',
-    location: '정림사지',
+    index: 'III',
+    era: 'JEONGNIMSA · 7C',
+    title: '돌에 남은\n고요한 질서',
+    titleEn: 'Silence, held in five stories of stone.',
+    description: '천오백 년의 바람을 견딘 오층석탑 앞에서 사비의 시간을 읽습니다.',
     image: '/buyeo-assets/slide-jeongnimsa.jpg',
-    imageAlt: '정림사지 오층석탑 정면과 뒤편 건물',
-    objectPosition: 'center 42%',
+    alt: '정림사지 오층석탑',
+    position: 'center 41%',
     credit: 'Bernard Gagnon · CC0 1.0',
   },
   {
-    title: '사비의 하루를\n가까이에서 걷다',
-    subtitle: '백제의 생활과 건축을 한눈에 만나는 시간',
-    location: '백제문화단지',
+    index: 'IV',
+    era: 'BAEKJE · TODAY',
+    title: '사라진 왕국은\n풍경이 되었다',
+    titleEn: 'The vanished kingdom became a landscape.',
+    description: '찬란함과 상실이 겹쳐진 도시, 부여를 오늘의 감각으로 다시 걷습니다.',
     image: '/buyeo-assets/slide-baekje-land.jpg',
-    imageAlt: '산을 배경으로 펼쳐진 부여 백제문화단지 전경',
-    objectPosition: 'center 50%',
+    alt: '산 아래 펼쳐진 백제문화단지 전경',
+    position: 'center 50%',
     credit: 'travel oriented · CC BY-SA 2.0',
   },
 ]
 
-const services = [
+const routes = [
   {
-    icon: 'route' as const,
-    title: '코스 추천',
-    description: '시간과 취향에 맞는 부여 여행 흐름',
-  },
-  {
-    icon: 'map' as const,
-    title: '로컬 장소',
-    description: '명소부터 식당, 카페, 숙소까지',
-  },
-  {
-    icon: 'message' as const,
-    title: '예약 문의',
-    description: '숙소와 체험 문의를 한곳에서',
-  },
-]
-
-const courses = [
-  {
-    title: '백제의 시간을 걷는 하루',
-    description: '처음 부여를 찾는 여행자를 위한 가장 정석적인 역사 코스',
-    tags: ['첫 방문', '역사', '하루'],
-    route: '궁남지 · 정림사지 · 부소산성',
+    no: '01',
+    time: '09:00 — 18:30',
+    title: '사비의 정수',
+    subtitle: '처음 만나는 부여',
+    stops: ['궁남지', '정림사지', '국립부여박물관', '부소산성'],
     image: '/buyeo-assets/slide-jeongnimsa.jpg',
-    imageAlt: '정림사지 오층석탑',
-    position: 'center 40%',
+    tags: ['HISTORY', 'ONE DAY'],
   },
   {
-    title: '연꽃과 노을 사이',
-    description: '사진과 산책을 좋아하는 사람을 위한 느린 감성 코스',
-    tags: ['산책', '사진', '카페'],
-    route: '궁남지 · 로컬 카페 · 성흥산',
+    no: '02',
+    time: '14:00 — SUNSET',
+    title: '빛을 따라',
+    subtitle: '산책과 사진의 오후',
+    stops: ['궁남지', '로컬 카페', '백마강', '성흥산'],
     image: '/buyeo-assets/slide-gungnamji.jpg',
-    imageAlt: '궁남지 포룡정과 연못',
-    position: 'center 55%',
+    tags: ['WALK', 'ROMANCE'],
   },
   {
-    title: '아이와 만나는 백제',
-    description: '보고, 듣고, 직접 경험하는 가족 주말 여행 코스',
-    tags: ['가족', '주말', '체험'],
-    route: '백제문화단지 · 박물관 · 궁남지',
+    no: '03',
+    time: '10:00 — 17:00',
+    title: '살아있는 백제',
+    subtitle: '아이와 함께하는 하루',
+    stops: ['백제문화단지', '어린이박물관', '궁남지', '로컬 식당'],
     image: '/buyeo-assets/slide-baekje-land.jpg',
-    imageAlt: '백제문화단지 전경',
-    position: 'center 48%',
+    tags: ['FAMILY', 'EXPERIENCE'],
   },
 ]
 
-function Icon({ name }: { name: IconName }) {
+function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return (
-    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-      {name === 'arrowLeft' && <path d="m15 18-6-6 6-6" />}
-      {name === 'arrowRight' && <path d="m9 18 6-6-6-6" />}
-      {name === 'home' && (
-        <>
-          <path d="m4.5 11 7.5-6 7.5 6" />
-          <path d="M7 10v9h10v-9" />
-        </>
-      )}
-      {name === 'route' && (
-        <>
-          <path d="M6 18c4-5.5 8-6.5 12-12" />
-          <circle cx="6" cy="18" r="2.2" />
-          <circle cx="18" cy="6" r="2.2" />
-        </>
-      )}
-      {name === 'map' && (
-        <>
-          <path d="m4 7 5-2 6 2 5-2v12l-5 2-6-2-5 2V7Z" />
-          <path d="M9 5v12M15 7v12" />
-        </>
-      )}
-      {name === 'message' && (
-        <>
-          <path d="M5 6h14v10H9l-4 3V6Z" />
-          <path d="M8.5 10h7M8.5 13h4.5" />
-        </>
-      )}
-      {name === 'calendar' && (
-        <>
-          <rect x="4" y="5.5" width="16" height="14" rx="2" />
-          <path d="M8 3.5v4M16 3.5v4M4 10h16" />
-        </>
-      )}
-      {name === 'store' && (
-        <>
-          <path d="M5 10h14l-1.4-5H6.4L5 10Z" />
-          <path d="M6.5 10v9h11v-9M9.5 19v-5h5v5" />
-        </>
-      )}
+    <svg className="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d={diagonal ? 'M7 17 17 7M8 7h9v9' : 'M4 12h16M14 6l6 6-6 6'} />
     </svg>
   )
 }
@@ -157,230 +101,187 @@ function Icon({ name }: { name: IconName }) {
 function Header() {
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="부여GO 홈">
-        <span className="brand-seal">扶</span>
-        <strong>부여GO</strong>
+      <a className="brand" href="#top" aria-label="부여GO 처음으로">
+        <span className="brand-mark">扶</span>
+        <span className="brand-word">
+          <strong>부여GO</strong>
+          <small>CURATED JOURNEY</small>
+        </span>
       </a>
       <nav className="desktop-nav" aria-label="주요 메뉴">
-        <a href="#courses">추천 코스</a>
-        <a href="#benefits">지역 혜택</a>
-        <a href="#partner">파트너 안내</a>
+        <a href="#story">사비의 서사</a>
+        <a href="#journeys">여행 코스</a>
+        <a href="#local">지역 안내</a>
       </nav>
-      <span className="mvp-label">MVP</span>
+      <a className="header-cta" href="#journeys">
+        여행 시작하기 <Arrow diagonal />
+      </a>
     </header>
   )
 }
 
-function HeroSlider() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+function Hero() {
+  const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
-    if (isPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return undefined
-    }
-
-    const timer = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % slides.length)
-    }, 6000)
-
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const timer = window.setInterval(() => setActive((value) => (value + 1) % scenes.length), 7200)
     return () => window.clearInterval(timer)
-  }, [isPaused])
+  }, [paused])
 
-  const move = (direction: number) => {
-    setActiveIndex((current) => (current + direction + slides.length) % slides.length)
-  }
+  const scene = scenes[active]
 
   return (
     <section
-      className="hero-slider"
+      className="hero"
       id="top"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
-      aria-label="부여 대표 풍경"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      aria-label="부여의 네 장면"
     >
       <Header />
-      <div className="slides">
-        {slides.map((slide, index) => (
-          <article
-            className={`slide ${index === activeIndex ? 'is-active' : ''}`}
-            key={slide.location}
-            aria-hidden={index !== activeIndex}
-          >
+      <div className="hero-images" aria-live="off">
+        {scenes.map((item, index) => (
+          <figure className={`hero-image ${index === active ? 'is-active' : ''}`} key={item.era}>
             <img
-              src={slide.image}
-              alt={index === activeIndex ? slide.imageAlt : ''}
-              style={{ objectPosition: slide.objectPosition }}
+              src={item.image}
+              alt={index === active ? item.alt : ''}
+              style={{ objectPosition: item.position }}
               loading={index === 0 ? 'eager' : 'lazy'}
             />
-            <div className="slide-shade" />
+          </figure>
+        ))}
+      </div>
+      <div className="hero-grain" />
+      <div className="hero-rail" aria-hidden="true">
+        <span>SABI</span><span>百濟</span><span>538—660</span>
+      </div>
+
+      <div className="hero-content" key={active}>
+        <p className="hero-era"><span>{scene.index}</span>{scene.era}</p>
+        <h1>{scene.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h1>
+        <div className="hero-note">
+          <p>{scene.titleEn}</p>
+          <p>{scene.description}</p>
+        </div>
+      </div>
+
+      <div className="hero-bottom">
+        <p className="hero-credit">IMAGE {scene.credit}</p>
+        <div className="hero-progress" aria-label={`${active + 1} / ${scenes.length}`}>
+          {scenes.map((item, index) => (
+            <button
+              type="button"
+              className={index === active ? 'is-active' : ''}
+              onClick={() => setActive(index)}
+              key={item.index}
+              aria-label={`${index + 1}번째 장면: ${item.title.replace('\n', ' ')}`}
+            ><span /></button>
+          ))}
+        </div>
+        <a href="#story" className="scroll-cue">SCROLL TO DISCOVER <span>↓</span></a>
+      </div>
+    </section>
+  )
+}
+
+function Story() {
+  return (
+    <section className="story section-shell" id="story">
+      <div className="section-number">01</div>
+      <div className="story-heading">
+        <p className="eyebrow">THE LAST CAPITAL OF BAEKJE</p>
+        <h2><span>찬란해서</span><span>더 애틋한 도시.</span></h2>
+      </div>
+      <div className="story-copy">
+        <p className="story-lead">부여는 유적을 보는 곳이 아니라,<br />한 왕국의 마지막 계절을 걷는 곳입니다.</p>
+        <p>538년, 백제는 도읍을 사비로 옮겼습니다. 강과 산, 정원과 석탑에 남은 단정한 아름다움은 화려함을 소리 높여 말하지 않습니다. 천천히 걸을수록 깊어지는 도시, 그게 우리가 발견한 부여입니다.</p>
+        <a href="#journeys" className="text-link">사비를 걷는 방법 <Arrow /></a>
+      </div>
+      <div className="story-art" aria-hidden="true">
+        <span className="story-ring ring-one" />
+        <span className="story-ring ring-two" />
+        <span className="story-ring ring-three" />
+        <strong>泗<br />沘</strong>
+      </div>
+    </section>
+  )
+}
+
+function Chapters() {
+  return (
+    <section className="chapters" aria-label="부여의 대표 장소">
+      {scenes.slice(1).map((scene, index) => (
+        <article className="chapter" key={scene.era}>
+          <img src={scene.image} alt={scene.alt} style={{ objectPosition: scene.position }} loading="lazy" />
+          <div className="chapter-wash" />
+          <p className="chapter-no">SCENE 0{index + 1}</p>
+          <div className="chapter-copy">
+            <p>{scene.era}</p>
+            <h3>{scene.title.replace('\n', ' ')}</h3>
+            <span>{scene.description}</span>
+          </div>
+        </article>
+      ))}
+    </section>
+  )
+}
+
+function Journeys() {
+  return (
+    <section className="journeys section-shell" id="journeys">
+      <div className="section-number">02</div>
+      <div className="journey-intro">
+        <p className="eyebrow">CURATED JOURNEYS</p>
+        <h2>당신의 속도로<br />읽는 부여.</h2>
+        <p>정답 대신 잘 짜인 흐름을 제안합니다.<br />시간과 마음에 맞는 하루를 고르세요.</p>
+      </div>
+      <div className="route-list">
+        {routes.map((route) => (
+          <article className="route-card" key={route.no}>
+            <div className="route-image">
+              <img src={route.image} alt="" loading="lazy" />
+              <span>{route.tags.join(' · ')}</span>
+            </div>
+            <div className="route-main">
+              <span className="route-no">{route.no}</span>
+              <p className="route-time">{route.time}</p>
+              <h3>{route.title}</h3>
+              <p className="route-subtitle">{route.subtitle}</p>
+            </div>
+            <ol className="route-stops">
+              {route.stops.map((stop, index) => <li key={stop}><span>0{index + 1}</span>{stop}</li>)}
+            </ol>
+            <button type="button" className="route-button" onClick={() => window.alert('코스 상세 페이지는 다음 단계에서 추가될 예정입니다.')}>
+              <span>코스 펼쳐보기</span><Arrow diagonal />
+            </button>
           </article>
         ))}
       </div>
-
-      <div className="hero-inner">
-        <div className="hero-copy-block" key={activeIndex}>
-          <p className="hero-kicker">오늘, 부여</p>
-          <h1>
-            {slides[activeIndex].title.split('\n').map((line) => (
-              <span key={line}>{line}</span>
-            ))}
-          </h1>
-          <p className="hero-description">{slides[activeIndex].subtitle}</p>
-          <div className="hero-actions">
-            <button
-              className="button button-primary"
-              type="button"
-              onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              여행 코스 보기
-              <Icon name="arrowRight" />
-            </button>
-            <button
-              className="button button-ghost"
-              type="button"
-              onClick={() => window.alert('예약 문의 기능은 다음 단계에서 추가될 예정입니다.')}
-            >
-              예약 문의 준비중
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="slider-footer">
-        <div className="slide-location">
-          <span>{String(activeIndex + 1).padStart(2, '0')}</span>
-          <strong>{slides[activeIndex].location}</strong>
-        </div>
-        <div className="slider-controls">
-          <button type="button" onClick={() => move(-1)} aria-label="이전 풍경">
-            <Icon name="arrowLeft" />
-          </button>
-          <div className="slide-dots" aria-label="슬라이드 선택">
-            {slides.map((slide, index) => (
-              <button
-                type="button"
-                className={index === activeIndex ? 'is-active' : ''}
-                key={slide.location}
-                onClick={() => setActiveIndex(index)}
-                aria-label={`${slide.location} 슬라이드`}
-                aria-current={index === activeIndex}
-              />
-            ))}
-          </div>
-          <button type="button" onClick={() => move(1)} aria-label="다음 풍경">
-            <Icon name="arrowRight" />
-          </button>
-        </div>
-        <small>{slides[activeIndex].credit}</small>
-      </div>
     </section>
   )
 }
 
-function ServiceMenu() {
+function LocalSection() {
   return (
-    <section className="service-menu" aria-label="부여GO 주요 서비스">
-      <div className="content-width service-grid">
-        {services.map((service) => (
-          <button
-            type="button"
-            key={service.title}
-            onClick={() => window.alert(`${service.title} 기능은 준비중입니다.`)}
-          >
-            <span className="service-icon"><Icon name={service.icon} /></span>
-            <span>
-              <strong>{service.title}</strong>
-              <small>{service.description}</small>
-            </span>
-            <Icon name="arrowRight" />
-          </button>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function CourseSection() {
-  return (
-    <section className="section course-section" id="courses">
-      <div className="content-width">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">추천 여행</p>
-            <h2>어떤 부여를 만나고 싶나요?</h2>
-          </div>
-          <p>처음 방문해도 어렵지 않도록 여행의 흐름부터 정리하고 있습니다.</p>
+    <section className="local" id="local">
+      <div className="local-image" role="img" aria-label="백제문화단지의 전경" />
+      <div className="local-panel">
+        <p className="eyebrow">BUYEOGO · NEXT CHAPTER</p>
+        <h2>여행의 다음 장면까지<br />부여GO가 준비합니다.</h2>
+        <div className="local-grid">
+          <article><span>01</span><h3>지역 혜택</h3><p>굿뜨래페이 사용 가능 매장과 지역 혜택 정보를 준비하고 있습니다.</p></article>
+          <article><span>02</span><h3>예약 문의</h3><p>숙소와 체험, 로컬 투어를 간단히 문의할 수 있도록 확장합니다.</p></article>
+          <article><span>03</span><h3>로컬 파트너</h3><p>부여의 좋은 가게와 사람을 여행자에게 제대로 소개합니다.</p></article>
         </div>
-        <div className="course-grid">
-          {courses.map((course) => (
-            <article className="course-card" key={course.title}>
-              <div className="course-image">
-                <img src={course.image} alt={course.imageAlt} style={{ objectPosition: course.position }} />
-                <div className="tag-list">
-                  {course.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                </div>
-              </div>
-              <div className="course-body">
-                <h3>{course.title}</h3>
-                <p>{course.description}</p>
-                <div className="route-line"><Icon name="route" /> {course.route}</div>
-                <button
-                  type="button"
-                  onClick={() => window.alert('코스 상세 페이지는 다음 단계에서 추가될 예정입니다.')}
-                >
-                  코스 미리보기 <Icon name="arrowRight" />
-                </button>
-              </div>
-            </article>
-          ))}
+        <div className="notice">
+          <strong>아직 공식 협의 전 단계입니다.</strong>
+          <p>현재 결제·예약 확정·공식 지역화폐 연동 기능은 제공하지 않습니다.</p>
         </div>
-      </div>
-    </section>
-  )
-}
-
-function BenefitsSection() {
-  return (
-    <section className="section benefits-section" id="benefits">
-      <div className="content-width benefits-layout">
-        <div className="benefits-copy">
-          <p className="eyebrow">지역 혜택 준비</p>
-          <h2>여행과 지역을 자연스럽게 잇는 방법</h2>
-          <p>
-            굿뜨래페이 사용 가능 매장과 지역 혜택 정보를 한눈에 확인할 수 있도록
-            준비하고 있습니다.
-          </p>
-          <div className="legal-notice">
-            현재는 공식 협의 전 단계이며 결제 및 공식 연동 기능을 제공하지 않습니다.
-          </div>
-        </div>
-        <div className="benefit-list">
-          <div><Icon name="store" /><span><strong>로컬 매장</strong><small>사용 가능 매장 정보</small></span></div>
-          <div><Icon name="calendar" /><span><strong>여행 혜택</strong><small>시기별 지역 혜택 안내</small></span></div>
-          <div><Icon name="message" /><span><strong>제휴 문의</strong><small>지역 업체 신청 창구</small></span></div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function PartnerSection() {
-  return (
-    <section className="partner-section" id="partner">
-      <img src="/buyeo-assets/slide-busosanseong.jpg" alt="낙화암에서 본 백마강" />
-      <div className="partner-overlay" />
-      <div className="content-width partner-content">
-        <p className="eyebrow">WITH LOCAL</p>
-        <h2>부여의 좋은 가게와 경험을<br />함께 소개하고 싶습니다.</h2>
-        <p>숙소, 식당, 카페, 체험 업체를 여행자와 연결할 준비를 하고 있습니다.</p>
-        <button
-          className="button button-light"
-          type="button"
-          onClick={() => window.alert('제휴 신청 기능은 다음 단계에서 추가될 예정입니다.')}
-        >
-          제휴 신청 준비중 <Icon name="arrowRight" />
+        <button type="button" className="gold-button" onClick={() => window.alert('제휴 및 예약 문의 기능은 다음 단계에서 추가될 예정입니다.')}>
+          파트너 안내 받기 <Arrow />
         </button>
       </div>
     </section>
@@ -389,53 +290,43 @@ function PartnerSection() {
 
 function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="content-width footer-main">
-        <div>
-          <strong className="footer-brand">부여GO</strong>
-          <p>부여 여행을 더 쉽게 만들기 위한 개인 프로젝트 MVP</p>
-        </div>
-        <div className="footer-links">
-          <span>공식 관광·결제 서비스가 아닙니다.</span>
-          <span>정보는 검증 후 순차적으로 업데이트됩니다.</span>
-        </div>
+    <footer className="footer">
+      <div className="footer-top">
+        <p className="footer-kicker">A JOURNEY TO THE LAST LIGHT OF BAEKJE</p>
+        <h2>오래된 도시를<br /><em>새롭게 여행하는 법.</em></h2>
+        <a href="#top" className="back-top">처음으로 <span>↑</span></a>
       </div>
-      <div className="content-width photo-credits">
-        <strong>PHOTO CREDITS</strong>
-        <p>
-          Gungnamji 011, Baekje Cultural Land 029 — travel oriented, CC BY-SA 2.0 ·
-          Nakwaam rock 1 — Frankhöffner, CC BY-SA 3.0 ·
-          Jeongnimsa Temple 03 — Bernard Gagnon, CC0 1.0.
-          Wikimedia Commons 원본을 웹 크기에 맞춰 축소했습니다.
-        </p>
+      <div className="footer-bottom">
+        <a className="footer-brand" href="#top"><span>扶</span><strong>부여GO</strong></a>
+        <p>부여 여행을 더 깊고 쉽게 만들기 위한 개인 프로젝트 MVP입니다.<br />공식 관광·결제 서비스가 아니며 정보는 검증 후 순차적으로 업데이트됩니다.</p>
+        <p className="credits">PHOTOGRAPHY · WIKIMEDIA COMMONS<br />각 이미지의 저작자와 라이선스는 슬라이드에 표기했습니다.</p>
+        <p className="copyright">© 2026 BUYEOGO<br />ALL RIGHTS RESERVED.</p>
       </div>
     </footer>
   )
 }
 
-function BottomNavigation() {
+function MobileNav() {
   return (
-    <nav className="bottom-nav" aria-label="모바일 주요 메뉴">
-      <a href="#top" aria-current="page"><Icon name="home" /><span>홈</span></a>
-      <a href="#courses"><Icon name="route" /><span>코스</span></a>
-      <button type="button" onClick={() => window.alert('장소 기능은 준비중입니다.')}><Icon name="map" /><span>장소</span></button>
-      <button type="button" onClick={() => window.alert('문의 기능은 준비중입니다.')}><Icon name="message" /><span>문의</span></button>
+    <nav className="mobile-nav" aria-label="모바일 메뉴">
+      <a href="#top"><span>○</span>홈</a>
+      <a href="#journeys"><span>⌁</span>코스</a>
+      <button type="button" onClick={() => window.alert('예약 문의 기능은 곧 추가될 예정입니다.')}><span>◇</span>문의</button>
+      <a href="#local"><span>＋</span>혜택</a>
     </nav>
   )
 }
 
-function App() {
+export default function App() {
   return (
     <main>
-      <HeroSlider />
-      <ServiceMenu />
-      <CourseSection />
-      <BenefitsSection />
-      <PartnerSection />
+      <Hero />
+      <Story />
+      <Chapters />
+      <Journeys />
+      <LocalSection />
       <Footer />
-      <BottomNavigation />
+      <MobileNav />
     </main>
   )
 }
-
-export default App
