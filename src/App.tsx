@@ -67,7 +67,8 @@ const routes = [
     title: '사비의 정수',
     subtitle: '처음 만나는 부여',
     stops: ['궁남지', '정림사지', '국립부여박물관', '부소산성'],
-    image: '/buyeo-assets/slide-jeongnimsa.jpg',
+    image: '/buyeo-assets/gwanbukri.jpg',
+    credit: 'Korearoadtour · CC BY-SA 4.0',
     tags: ['역사', '하루 여행'],
     distance: '약 7.2km',
     pace: '천천히 걷는 하루',
@@ -80,7 +81,8 @@ const routes = [
     title: '빛을 따라',
     subtitle: '산책과 사진의 오후',
     stops: ['궁남지', '로컬 카페', '백마강', '성흥산'],
-    image: '/buyeo-assets/slide-gungnamji.jpg',
+    image: '/buyeo-assets/goransa.jpg',
+    credit: 'Touam · CC0 1.0',
     tags: ['산책', '둘만의 여행'],
     distance: '약 5.8km',
     pace: '오후부터 노을까지',
@@ -93,7 +95,8 @@ const routes = [
     title: '살아있는 백제',
     subtitle: '아이와 함께하는 하루',
     stops: ['백제문화단지', '어린이박물관', '궁남지', '로컬 식당'],
-    image: '/buyeo-assets/slide-baekje-land.jpg',
+    image: '/buyeo-assets/neungsanri-tombs.jpg',
+    credit: 'Ryuch · CC BY-SA 3.0',
     tags: ['가족', '체험'],
     distance: '약 4.6km',
     pace: '쉬어가며 반나절',
@@ -120,9 +123,17 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   )
 }
 
-function Header({ onOpenService }: { onOpenService: () => void }) {
+type PageId = 'walk' | 'tales' | 'maker'
+
+const pageLinks = [
+  { id: 'walk' as PageId, no: '01', label: '부여를 걷다', href: '/' },
+  { id: 'tales' as PageId, no: '02', label: '사비의 옛이야기', href: '/tales' },
+  { id: 'maker' as PageId, no: '03', label: '만든 이의 기록', href: '/maker' },
+]
+
+function GlobalHeader({ current, fixed = false, adaptive = false }: { current: PageId, fixed?: boolean, adaptive?: boolean }) {
   return (
-    <header className="site-header">
+    <header className={`site-header ${fixed ? 'is-fixed' : ''} ${adaptive ? 'is-adaptive' : ''}`}>
       <a className="brand" href="/" aria-label="부여로 처음으로">
         <BrandSymbol />
         <span className="brand-word">
@@ -130,14 +141,14 @@ function Header({ onOpenService }: { onOpenService: () => void }) {
           <small>부여 여행 큐레이션</small>
         </span>
       </a>
-      <nav className="desktop-nav" aria-label="주요 메뉴">
-        <a href="/">부여를 걷다</a>
-        <a href="/tales">사비의 옛이야기</a>
-        <a href="/maker">만든 이의 기록</a>
+      <nav className="page-nav" aria-label="독립 페이지 메뉴">
+        {pageLinks.map((item) => (
+          <a href={item.href} className={item.id === current ? 'is-current' : ''} aria-current={item.id === current ? 'page' : undefined} key={item.id}>
+            <small>{item.no}</small><span>{item.label}</span>{item.id !== current && <i aria-hidden="true">↗</i>}
+          </a>
+        ))}
       </nav>
-      <button className="header-cta" type="button" onClick={onOpenService}>
-        여행 시작하기 <Arrow diagonal />
-      </button>
+      <p className="header-context"><span>3개의 독립 페이지</span><small>PAGE COLLECTION</small></p>
     </header>
   )
 }
@@ -163,7 +174,7 @@ function Hero({ onOpenService }: { onOpenService: () => void }) {
       aria-roledescription="carousel"
       aria-label="부여의 네 장면"
     >
-      <Header onOpenService={onOpenService} />
+      <GlobalHeader current="walk" />
       <div className="hero-images" aria-live="off">
         {scenes.map((item, index) => (
           <figure className={`hero-image ${index === active ? 'is-active' : ''}`} key={item.era}>
@@ -204,7 +215,7 @@ function Hero({ onOpenService }: { onOpenService: () => void }) {
           ))}
         </div>
         <button className="hero-service-button" type="button" onClick={onOpenService}>
-          <span><small>부여 여행 서비스</small>여행 시작하기</span>
+          <span><small>별도 여행 서비스 · 준비중</small>여행 시작하기</span>
           <Arrow diagonal />
         </button>
       </div>
@@ -274,7 +285,7 @@ function Journeys() {
           <article className={`route-card ${expandedRoute === index ? 'is-expanded' : ''}`} key={route.no}>
             <div className="route-image">
               <img src={route.image} alt="" loading="lazy" />
-              <span>{route.tags.join(' · ')}</span>
+              <span>사진 · {route.credit}</span>
             </div>
             <div className="route-main">
               <span className="route-no">{route.no}</span>
@@ -362,7 +373,7 @@ function Footer() {
         <a className="footer-brand" href="#top"><BrandSymbol /><span><strong>부여로</strong><small>부여 여행 큐레이션</small></span></a>
         <p>부여 여행을 더 깊고 쉽게 만들기 위한 개인 프로젝트 MVP입니다.<br />공식 관광·결제 서비스가 아니며 정보는 검증 후 순차적으로 업데이트됩니다.</p>
         <p className="credits">사진 출처 · 위키미디어 공용<br />각 이미지의 저작자와 이용 조건은 슬라이드에 표기했습니다.</p>
-        <p className="copyright">© 2026 부여로<br />최종 수정 · 2026.06.19</p>
+        <p className="copyright">© 2026 부여로<br />최종 수정 · 2026.06.20</p>
       </div>
     </footer>
   )
@@ -407,46 +418,43 @@ function ServiceGate({ onClose }: { onClose: () => void }) {
   )
 }
 
-function SubpageHeader() {
-  return (
-    <header className="subpage-header">
-      <a className="brand" href="/" aria-label="부여로 처음으로"><BrandSymbol /><span className="brand-word"><strong>부여로</strong><small>부여 여행 큐레이션</small></span></a>
-      <nav aria-label="콘텐츠 메뉴"><a href="/">부여를 걷다</a><a href="/tales">사비의 옛이야기</a><a href="/maker">만든 이의 기록</a></nav>
-    </header>
-  )
-}
-
 const taleChapters = [
   {
+    slug: 'nakhwaam',
     number: '첫 번째 이야기',
     title: '꽃처럼 떨어진\n사람들의 이름',
     subtitle: '낙화암과 삼천궁녀',
     body: '백제가 무너지던 날의 슬픔은 오랜 세월을 지나 ‘삼천궁녀’라는 이야기로 전해졌습니다. 그러나 삼천이라는 숫자와 궁녀의 이야기는 후대에 덧입혀진 상징으로 보는 시선도 있습니다.',
     note: '기록과 전설 사이에서, 우리는 이름 없이 사라진 사람들을 먼저 기억합니다.',
-    image: '/buyeo-assets/slide-busosanseong.jpg',
+    image: '/buyeo-assets/baekhwajeong.jpg',
+    credit: 'travel oriented · CC BY-SA 2.0',
   },
   {
+    slug: 'seodong',
     number: '두 번째 이야기',
     title: '노래가 데려온\n두 사람의 인연',
     subtitle: '서동과 선화공주',
     body: '마를 캐던 서동은 아이들에게 노래를 퍼뜨려 신라의 선화공주와 인연을 맺었다고 전해집니다. 사랑과 야심, 왕이 되는 이야기가 짧은 노래 한 수에 담겼습니다.',
     note: '서동요는 역사와 설화가 맞닿는 자리에서 지금도 새롭게 읽힙니다.',
-    image: '/buyeo-assets/slide-gungnamji.jpg',
+    image: '/buyeo-assets/neungsanri-tombs.jpg',
+    credit: 'Ryuch · CC BY-SA 3.0',
   },
   {
+    slug: null,
     number: '다음 이야기',
     title: '부여의 밤에는\n아직 이야기가 많습니다.',
     subtitle: '이야기 서재 준비중',
     body: '백제금동대향로, 의자왕, 백마강과 용의 전설까지. 자료를 확인하고 한 장씩 천천히 펼쳐 보이겠습니다.',
     note: '이 페이지는 동화책처럼 넘기는 설화 콘텐츠의 초기 목업입니다.',
-    image: '/buyeo-assets/slide-jeongnimsa.jpg',
+    image: '/buyeo-assets/incense-burner.jpg',
+    credit: 'Good friend100 · Public domain',
   },
 ]
 
 function TalesPage() {
   return (
     <main className="tales-page">
-      <SubpageHeader />
+      <GlobalHeader current="tales" fixed />
       <section className="tale-cover snap-page">
         <p>부여로 이야기 서재</p><h1>사비의<br />옛이야기</h1><span>기록과 전설 사이, 오래된 목소리를 따라갑니다.</span>
       </section>
@@ -454,9 +462,65 @@ function TalesPage() {
         <section className="tale-chapter snap-page" key={chapter.number}>
           <img src={chapter.image} alt="" />
           <div className="tale-shade" />
-          <div className="tale-copy"><p>{chapter.number} · {chapter.subtitle}</p><h2>{chapter.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h2><div><p>{chapter.body}</p><small>{chapter.note}</small></div></div>
+          <div className="tale-copy"><p>{chapter.number} · {chapter.subtitle}</p><h2>{chapter.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h2><div><p>{chapter.body}</p><small>{chapter.note}</small>{chapter.slug ? <a className="tale-read-link" href={`/tales/${chapter.slug}`}>이야기 한 편 모두 읽기 <Arrow diagonal /></a> : <span className="tale-coming">다음 장을 준비하고 있습니다.</span>}</div></div>
+          <p className="tale-credit">사진 · {chapter.credit}</p>
         </section>
       ))}
+    </main>
+  )
+}
+
+const taleDetails = {
+  nakhwaam: {
+    label: '첫 번째 이야기 · 낙화암',
+    title: '꽃처럼 떨어진\n사람들의 이름',
+    intro: '660년, 사비성이 무너지던 날. 백마강 절벽에 남은 이야기는 오랜 세월 동안 사실과 전설, 애도와 상징 사이를 흘러왔습니다.',
+    cover: '/buyeo-assets/nakhwaam.jpg',
+    coverCredit: 'Frankhöffner · CC BY-SA 3.0',
+    chapters: [
+      { no: '一', kicker: '사비의 마지막 여름', title: '강 건너에서\n먼지가 일었다.', body: '나당연합군이 백제의 도성으로 향하던 660년 여름, 사비는 왕국의 마지막 시간을 맞았습니다. 부소산성은 도성을 감싸는 마지막 방어선이었고, 그 아래로 백마강이 흘렀습니다.', image: '/buyeo-assets/gwanbukri.jpg', credit: 'Korearoadtour · CC BY-SA 4.0' },
+      { no: '二', kicker: '기록과 전설', title: '삼천이라는 수는\n슬픔의 크기였다.', body: '당대 기록에는 ‘삼천궁녀’가 등장하지 않습니다. 후대의 시와 이야기 속에서 숫자는 나라와 함께 사라진 수많은 사람을 상징하게 되었습니다. 이 이야기는 사실을 단정하는 대신, 누가 기억에서 지워졌는지 묻습니다.', image: '/buyeo-assets/baekhwajeong.jpg', credit: 'travel oriented · CC BY-SA 2.0' },
+      { no: '三', kicker: '절벽 아래의 고요', title: '이름 대신\n꽃을 놓다.', body: '오늘의 낙화암에는 백화정이 서 있고, 절벽 아래 고란사까지 숲길이 이어집니다. 전설을 그대로 믿거나 밀어내기보다, 이름 없이 사라진 이들의 삶을 생각하며 천천히 걷는 길입니다.', image: '/buyeo-assets/goransa.jpg', credit: 'Touam · CC0 1.0' },
+    ],
+    route: { title: '멸망의 날을 따라 걷는 길', duration: '약 3시간 30분', distance: '약 4.8km', stops: ['관북리 유적', '부소산성', '백화정·낙화암', '고란사', '백마강 나루'] },
+  },
+  seodong: {
+    label: '두 번째 이야기 · 서동요',
+    title: '노래가 데려온\n두 사람의 인연',
+    intro: '마를 캐던 소년과 신라의 공주. 네 줄짜리 노래는 사랑 이야기이면서 왕이 되고자 했던 한 사람의 대담한 서사입니다.',
+    cover: '/buyeo-assets/slide-gungnamji.jpg',
+    coverCredit: 'Frankhöffner · CC BY-SA 3.0',
+    chapters: [
+      { no: '一', kicker: '마를 캐는 아이', title: '이름보다 먼저\n노래가 태어났다.', body: '서동은 마를 캐어 팔던 인물로 전해집니다. 그는 아이들에게 노래를 부르게 했고, 짧고 강한 이야기는 사람들의 입을 타고 신라의 궁궐까지 번졌습니다.', image: '/buyeo-assets/neungsanri-tombs.jpg', credit: 'Ryuch · CC BY-SA 3.0' },
+      { no: '二', kicker: '서동과 선화', title: '소문은 두 사람을\n길 위에 세웠다.', body: '『삼국유사』가 전하는 서동요에는 사랑과 계략이 함께 있습니다. 선화공주는 궁을 떠나 서동과 길을 나서고, 서동은 훗날 왕이 됩니다. 아름다운 설화 안에는 시대의 욕망도 겹쳐 있습니다.', image: '/buyeo-assets/gwanbukri.jpg', credit: 'Korearoadtour · CC BY-SA 4.0' },
+      { no: '三', kicker: '왕의 정원', title: '연못 위에\n남은 상상.', body: '궁남지는 백제 무왕과 연결해 읽히는 왕궁 남쪽의 정원입니다. 버드나무와 물길 사이를 걸으면, 역사로 모두 증명할 수 없어도 오래 살아남은 이야기의 힘을 만날 수 있습니다.', image: '/buyeo-assets/slide-gungnamji.jpg', credit: 'Frankhöffner · CC BY-SA 3.0' },
+    ],
+    route: { title: '서동의 노래에서 왕의 정원까지', duration: '약 4시간', distance: '약 6.2km', stops: ['국립부여박물관', '능산리 고분군', '관북리 유적', '궁남지', '서동공원'] },
+  },
+}
+
+function TaleDetailPage({ slug }: { slug: keyof typeof taleDetails }) {
+  const tale = taleDetails[slug]
+  return (
+    <main className="tale-detail-page">
+      <GlobalHeader current="tales" fixed />
+      <section className="tale-detail-cover snap-page">
+        <img src={tale.cover} alt="" />
+        <div className="tale-detail-shade" />
+        <div><p>{tale.label}</p><h1>{tale.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h1><blockquote>{tale.intro}</blockquote></div>
+        <small>사진 · {tale.coverCredit}</small>
+      </section>
+      {tale.chapters.map((chapter) => (
+        <section className="storybook-page snap-page" key={chapter.no}>
+          <figure><img src={chapter.image} alt="" /><figcaption>사진 · {chapter.credit}</figcaption></figure>
+          <article><p>{chapter.no} · {chapter.kicker}</p><h2>{chapter.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h2><div>{chapter.body}</div></article>
+        </section>
+      ))}
+      <section className="tale-route snap-page">
+        <div className="tale-route-intro"><p>이야기 다음의 실제 여행</p><h2>{tale.route.title}</h2><span>{tale.route.duration} · {tale.route.distance}</span></div>
+        <ol>{tale.route.stops.map((stop, index) => <li key={stop}><small>0{index + 1}</small><strong>{stop}</strong>{index < tale.route.stops.length - 1 && <span aria-hidden="true">→</span>}</li>)}</ol>
+        <a href="/">부여의 다른 여행 코스 보기 <Arrow /></a>
+      </section>
     </main>
   )
 }
@@ -464,7 +528,7 @@ function TalesPage() {
 function MakerPage() {
   return (
     <main className="maker-page">
-      <SubpageHeader />
+      <GlobalHeader current="maker" fixed adaptive />
       <section className="maker-cover snap-page"><p>만든 이의 기록</p><h1>도시를 좋아하는 마음이<br />하나의 화면이 되기까지.</h1><span>이곳에는 부여로를 만든 개발자의 이야기가 채워질 예정입니다.</span></section>
       <section className="maker-notes snap-page">
         <div className="maker-sticky"><p>개발 기록 · 목업</p><h2>무엇을,<br />왜 만들었나.</h2></div>
@@ -552,7 +616,12 @@ export default function App() {
   const [serviceOpen, setServiceOpen] = useState(false)
   const path = window.location.pathname.replace(/\/$/, '') || '/'
 
-  const metadata = path === '/tales'
+  const taleSlug = path.startsWith('/tales/') ? path.split('/')[2] as keyof typeof taleDetails : null
+  const detailTale = taleSlug && taleDetails[taleSlug]
+
+  const metadata = detailTale
+    ? [`${detailTale.label} | 부여로`, detailTale.intro, path]
+    : path === '/tales'
     ? ['사비의 옛이야기 | 부여로', '부여에 전해지는 설화를 기록과 전설 사이에서 읽는 이야기 서재입니다.', '/tales']
     : path === '/maker'
       ? ['만든 이의 기록 | 부여로', '부여로를 만든 개발자의 생각과 제작 과정을 기록할 개인 페이지입니다.', '/maker']
@@ -560,6 +629,7 @@ export default function App() {
 
   usePageMetadata(metadata[0], metadata[1], metadata[2])
 
+  if (detailTale && taleSlug) return <TaleDetailPage slug={taleSlug} />
   if (path === '/tales') return <TalesPage />
   if (path === '/maker') return <MakerPage />
 
