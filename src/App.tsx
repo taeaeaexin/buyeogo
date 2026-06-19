@@ -131,11 +131,11 @@ const pageLinks = [
   { id: 'maker' as PageId, no: '03', label: '만든 이의 기록', description: '이 도시를 화면에 옮긴 과정', href: '/maker' },
 ]
 
-function GlobalHeader({ current, fixed = false, trail }: { current: PageId, fixed?: boolean, trail?: string }) {
+function GlobalHeader({ current, fixed = false, trail, tone = 'on-dark' }: { current: PageId, fixed?: boolean, trail?: string, tone?: 'on-light' | 'on-dark' }) {
   const currentPage = pageLinks.find((item) => item.id === current) ?? pageLinks[0]
 
   return (
-    <header className={`site-header ${fixed ? 'is-fixed' : ''}`}>
+    <header className={`site-header ${fixed ? 'is-fixed' : ''} ${tone}`}>
       <a className="brand" href="/" aria-label="부여로 처음으로">
         <BrandSymbol />
         <span className="brand-word">
@@ -541,9 +541,25 @@ function TaleDetailPage({ slug }: { slug: keyof typeof taleDetails }) {
 }
 
 function MakerPage() {
+  const [headerTone, setHeaderTone] = useState<'on-light' | 'on-dark'>('on-light')
+
+  useEffect(() => {
+    const cover = document.querySelector<HTMLElement>('.maker-cover')
+    if (!cover) return
+
+    const updateTone = () => setHeaderTone(window.scrollY < cover.offsetHeight - 88 ? 'on-light' : 'on-dark')
+    updateTone()
+    window.addEventListener('scroll', updateTone, { passive: true })
+    window.addEventListener('resize', updateTone)
+    return () => {
+      window.removeEventListener('scroll', updateTone)
+      window.removeEventListener('resize', updateTone)
+    }
+  }, [])
+
   return (
     <main className="maker-page">
-      <GlobalHeader current="maker" fixed />
+      <GlobalHeader current="maker" fixed tone={headerTone} />
       <section className="maker-cover snap-page"><p>만든 이의 기록</p><h1>도시를 좋아하는 마음이<br />하나의 화면이 되기까지.</h1><span>이곳에는 부여로를 만든 개발자의 이야기가 채워질 예정입니다.</span></section>
       <section className="maker-notes snap-page">
         <div className="maker-sticky"><p>개발 기록 · 목업</p><h2>무엇을,<br />왜 만들었나.</h2></div>

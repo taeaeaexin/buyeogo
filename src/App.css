@@ -134,14 +134,17 @@ img { display: block; }
 .page-menu-panel nav a > b { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(233,228,217,.2); border-radius: 50%; font-family: Georgia, serif; font-size: 12px; font-weight: 400; }
 .page-menu-panel nav a.is-current > b { color: var(--ink); background: var(--gold-bright); }
 .page-menu-foot { position: absolute; right: 7.5vw; bottom: 4vh; margin: 0; color: rgba(233,228,217,.25); font-family: Georgia, serif; font-size: 7px; letter-spacing: .17em; }
-.maker-page .site-header { color: var(--ink); border-color: rgba(17,17,15,.18); }
-.maker-page .site-header .brand-symbol .symbol-frame, .maker-page .site-header .brand-symbol .symbol-route { stroke: rgba(17,17,15,.7); }
-.maker-page .site-header .brand-symbol .symbol-point { fill: var(--red); }
-.maker-page .site-header .brand-word small, .maker-page .header-location small { color: rgba(17,17,15,.46); }
-.maker-page .header-location, .maker-page .header-location strong { color: rgba(17,17,15,.76); }
-.maker-page .header-location > span, .maker-page .page-switcher summary, .maker-page .page-switcher summary > i { border-color: rgba(17,17,15,.3); }
-.maker-page .page-switcher summary { color: rgba(17,17,15,.82); }
-.maker-page .page-switcher[open] summary { color: var(--paper); border-color: rgba(255,255,255,.28); }
+.maker-page .site-header { border-color: transparent; transition: color .28s ease; }
+.maker-page .site-header::after { position: absolute; right: 0; bottom: 0; left: 0; height: 1px; background: currentColor; content: ''; opacity: .22; transition: background .28s ease; }
+.maker-page .site-header.on-light { color: var(--ink); }
+.maker-page .site-header.on-light .brand-symbol .symbol-frame { stroke: rgba(17,17,15,.48); }
+.maker-page .site-header.on-light .brand-symbol .symbol-route { stroke: rgba(17,17,15,.88); }
+.maker-page .site-header.on-light .brand-symbol .symbol-point { fill: var(--red); }
+.maker-page .site-header.on-light .brand-word small { color: rgba(17,17,15,.52); }
+.maker-page .site-header.on-light .page-switcher > summary { color: rgba(17,17,15,.86); border-color: rgba(17,17,15,.28); }
+.maker-page .site-header.on-light .page-switcher > summary > i { border-color: rgba(17,17,15,.34); }
+.maker-page .site-header.on-light .page-switcher[open] > summary { color: var(--paper); border-color: rgba(255,255,255,.28); }
+.maker-page .site-header.on-light .page-switcher[open] > summary > i { border-color: rgba(255,255,255,.38); }
 .hero {
   position: relative;
   min-height: 100svh;
