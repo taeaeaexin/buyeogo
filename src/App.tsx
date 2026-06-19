@@ -16,9 +16,9 @@ type Scene = {
 const scenes: Scene[] = [
   {
     index: 'I',
-    era: 'SABI · 538',
+    era: '사비 · 538',
     title: '강 위에 세운\n마지막 수도',
-    titleEn: 'The last capital, raised beside the river.',
+    titleEn: '강가에 세운 백제의 마지막 수도.',
     description: '백마강의 물길을 따라 백제는 가장 우아한 마지막 장을 열었습니다.',
     image: '/buyeo-assets/slide-busosanseong.jpg',
     alt: '낙화암에서 내려다본 백마강과 부여의 산세',
@@ -27,9 +27,9 @@ const scenes: Scene[] = [
   },
   {
     index: 'II',
-    era: 'GUNGNAMJI · 634',
+    era: '궁남지 · 634',
     title: '물 위에 머문\n백제의 정원',
-    titleEn: 'A garden where Baekje still lingers.',
+    titleEn: '백제의 시간이 머무는 물 위의 정원.',
     description: '버드나무와 연꽃, 포룡정 사이를 걸으며 오래된 왕도의 숨을 만납니다.',
     image: '/buyeo-assets/slide-gungnamji.jpg',
     alt: '버드나무와 포룡정이 어우러진 궁남지 풍경',
@@ -38,9 +38,9 @@ const scenes: Scene[] = [
   },
   {
     index: 'III',
-    era: 'JEONGNIMSA · 7C',
+    era: '정림사지 · 7세기',
     title: '돌에 남은\n고요한 질서',
-    titleEn: 'Silence, held in five stories of stone.',
+    titleEn: '다섯 층의 돌에 고요를 쌓아 올리다.',
     description: '천오백 년의 바람을 견딘 오층석탑 앞에서 사비의 시간을 읽습니다.',
     image: '/buyeo-assets/slide-jeongnimsa.jpg',
     alt: '정림사지 오층석탑',
@@ -49,9 +49,9 @@ const scenes: Scene[] = [
   },
   {
     index: 'IV',
-    era: 'BAEKJE · TODAY',
+    era: '백제 · 오늘',
     title: '사라진 왕국은\n풍경이 되었다',
-    titleEn: 'The vanished kingdom became a landscape.',
+    titleEn: '사라진 왕국은 오늘의 풍경이 되었다.',
     description: '찬란함과 상실이 겹쳐진 도시, 부여를 오늘의 감각으로 다시 걷습니다.',
     image: '/buyeo-assets/slide-baekje-land.jpg',
     alt: '산 아래 펼쳐진 백제문화단지 전경',
@@ -63,32 +63,54 @@ const scenes: Scene[] = [
 const routes = [
   {
     no: '01',
-    time: '09:00 — 18:30',
+    time: '오전 9시 — 오후 6시 30분',
     title: '사비의 정수',
     subtitle: '처음 만나는 부여',
     stops: ['궁남지', '정림사지', '국립부여박물관', '부소산성'],
     image: '/buyeo-assets/slide-jeongnimsa.jpg',
-    tags: ['HISTORY', 'ONE DAY'],
+    tags: ['역사', '하루 여행'],
+    distance: '약 7.2km',
+    pace: '천천히 걷는 하루',
+    highlight: '석탑에 오후의 빛이 가장 낮게 걸리는 순간',
+    description: '왕궁의 정원에서 시작해 사비의 중심을 지나 백마강을 내려다보는, 부여의 공간과 시간을 가장 온전히 이해하는 흐름입니다.',
   },
   {
     no: '02',
-    time: '14:00 — SUNSET',
+    time: '오후 2시 — 해질녘',
     title: '빛을 따라',
     subtitle: '산책과 사진의 오후',
     stops: ['궁남지', '로컬 카페', '백마강', '성흥산'],
     image: '/buyeo-assets/slide-gungnamji.jpg',
-    tags: ['WALK', 'ROMANCE'],
+    tags: ['산책', '둘만의 여행'],
+    distance: '약 5.8km',
+    pace: '오후부터 노을까지',
+    highlight: '연못의 수면과 백마강의 노을이 이어지는 시간',
+    description: '빨리 많이 보는 대신 빛이 머무는 곳을 오래 걷습니다. 사진과 대화, 느린 저녁을 좋아하는 여행자를 위한 코스입니다.',
   },
   {
     no: '03',
-    time: '10:00 — 17:00',
+    time: '오전 10시 — 오후 5시',
     title: '살아있는 백제',
     subtitle: '아이와 함께하는 하루',
     stops: ['백제문화단지', '어린이박물관', '궁남지', '로컬 식당'],
     image: '/buyeo-assets/slide-baekje-land.jpg',
-    tags: ['FAMILY', 'EXPERIENCE'],
+    tags: ['가족', '체험'],
+    distance: '약 4.6km',
+    pace: '쉬어가며 반나절',
+    highlight: '책에서 본 백제를 눈앞에서 만나는 첫 순간',
+    description: '어린이가 지치지 않도록 관람과 체험, 산책과 식사를 번갈아 배치했습니다. 이야기로 기억되는 가족의 하루를 제안합니다.',
   },
 ]
+
+function BrandSymbol({ className = '' }: { className?: string }) {
+  return (
+    <svg className={`brand-symbol ${className}`} viewBox="0 0 48 48" aria-hidden="true">
+      <path className="symbol-frame" d="M24 2.5C35.9 2.5 45.5 12.1 45.5 24S35.9 45.5 24 45.5 2.5 35.9 2.5 24 12.1 2.5 24 2.5Z" />
+      <path className="symbol-stone" d="M18 16h12M15.5 20.5h17M18.5 25h11M21 29.5h6" />
+      <path className="symbol-river" d="M10.5 34.5c5-2.8 9.4-2.8 13.5 0s8.5 2.8 13.5 0" />
+    </svg>
+  )
+}
 
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return (
@@ -101,11 +123,11 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 function Header() {
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="부여GO 처음으로">
-        <span className="brand-mark">扶</span>
+      <a className="brand" href="#top" aria-label="사비로 처음으로">
+        <BrandSymbol />
         <span className="brand-word">
-          <strong>부여GO</strong>
-          <small>CURATED JOURNEY</small>
+          <strong>사비로</strong>
+          <small>부여 여행 큐레이션</small>
         </span>
       </a>
       <nav className="desktop-nav" aria-label="주요 메뉴">
@@ -134,7 +156,7 @@ function Hero() {
 
   return (
     <section
-      className="hero"
+      className="hero snap-page"
       id="top"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -156,7 +178,7 @@ function Hero() {
       </div>
       <div className="hero-grain" />
       <div className="hero-rail" aria-hidden="true">
-        <span>SABI</span><span>百濟</span><span>538—660</span>
+        <span>사비</span><span>백제</span><span>538—660</span>
       </div>
 
       <div className="hero-content" key={active}>
@@ -169,7 +191,7 @@ function Hero() {
       </div>
 
       <div className="hero-bottom">
-        <p className="hero-credit">IMAGE {scene.credit}</p>
+        <p className="hero-credit">사진 · {scene.credit}</p>
         <div className="hero-progress" aria-label={`${active + 1} / ${scenes.length}`}>
           {scenes.map((item, index) => (
             <button
@@ -181,7 +203,7 @@ function Hero() {
             ><span /></button>
           ))}
         </div>
-        <a href="#story" className="scroll-cue">SCROLL TO DISCOVER <span>↓</span></a>
+        <a href="#story" className="scroll-cue">다음 장면 <span>↓</span></a>
       </div>
     </section>
   )
@@ -189,10 +211,10 @@ function Hero() {
 
 function Story() {
   return (
-    <section className="story section-shell" id="story">
+    <section className="story section-shell snap-page" id="story">
       <div className="section-number">01</div>
       <div className="story-heading">
-        <p className="eyebrow">THE LAST CAPITAL OF BAEKJE</p>
+        <p className="eyebrow">백제의 마지막 수도</p>
         <h2><span>찬란해서</span><span>더 애틋한 도시.</span></h2>
       </div>
       <div className="story-copy">
@@ -212,12 +234,12 @@ function Story() {
 
 function Chapters() {
   return (
-    <section className="chapters" aria-label="부여의 대표 장소">
+    <section className="chapters snap-page" id="scenes" aria-label="부여의 대표 장소">
       {scenes.slice(1).map((scene, index) => (
         <article className="chapter" key={scene.era}>
           <img src={scene.image} alt={scene.alt} style={{ objectPosition: scene.position }} loading="lazy" />
           <div className="chapter-wash" />
-          <p className="chapter-no">SCENE 0{index + 1}</p>
+          <p className="chapter-no">장면 0{index + 1}</p>
           <div className="chapter-copy">
             <p>{scene.era}</p>
             <h3>{scene.title.replace('\n', ' ')}</h3>
@@ -230,17 +252,23 @@ function Chapters() {
 }
 
 function Journeys() {
+  const [expandedRoute, setExpandedRoute] = useState<number | null>(0)
+
   return (
-    <section className="journeys section-shell" id="journeys">
+    <section className="journeys section-shell snap-page snap-page-long" id="journeys">
       <div className="section-number">02</div>
       <div className="journey-intro">
-        <p className="eyebrow">CURATED JOURNEYS</p>
+        <p className="eyebrow">세심하게 고른 여행</p>
         <h2>당신의 속도로<br />읽는 부여.</h2>
         <p>정답 대신 잘 짜인 흐름을 제안합니다.<br />시간과 마음에 맞는 하루를 고르세요.</p>
+        <div className="journey-index" aria-hidden="true">
+          <span>세 가지 여행</span>
+          <strong>03</strong>
+        </div>
       </div>
       <div className="route-list">
-        {routes.map((route) => (
-          <article className="route-card" key={route.no}>
+        {routes.map((route, index) => (
+          <article className={`route-card ${expandedRoute === index ? 'is-expanded' : ''}`} key={route.no}>
             <div className="route-image">
               <img src={route.image} alt="" loading="lazy" />
               <span>{route.tags.join(' · ')}</span>
@@ -254,8 +282,21 @@ function Journeys() {
             <ol className="route-stops">
               {route.stops.map((stop, index) => <li key={stop}><span>0{index + 1}</span>{stop}</li>)}
             </ol>
-            <button type="button" className="route-button" onClick={() => window.alert('코스 상세 페이지는 다음 단계에서 추가될 예정입니다.')}>
-              <span>코스 펼쳐보기</span><Arrow diagonal />
+            <div className="route-detail" aria-hidden={expandedRoute !== index}>
+              <p>{route.description}</p>
+              <dl>
+                <div><dt>걷는 거리</dt><dd>{route.distance}</dd></div>
+                <div><dt>여행 속도</dt><dd>{route.pace}</dd></div>
+                <div><dt>기억할 순간</dt><dd>{route.highlight}</dd></div>
+              </dl>
+            </div>
+            <button
+              type="button"
+              className="route-button"
+              onClick={() => setExpandedRoute(expandedRoute === index ? null : index)}
+              aria-expanded={expandedRoute === index}
+            >
+              <span>{expandedRoute === index ? '코스 접기' : '코스 펼쳐보기'}</span><Arrow diagonal />
             </button>
           </article>
         ))}
@@ -266,11 +307,11 @@ function Journeys() {
 
 function LocalSection() {
   return (
-    <section className="local" id="local">
+    <section className="local snap-page" id="local">
       <div className="local-image" role="img" aria-label="백제문화단지의 전경" />
       <div className="local-panel">
-        <p className="eyebrow">BUYEOGO · NEXT CHAPTER</p>
-        <h2>여행의 다음 장면까지<br />부여GO가 준비합니다.</h2>
+        <p className="eyebrow">사비로 · 다음 이야기</p>
+        <h2>여행의 다음 장면까지<br />사비로가 준비합니다.</h2>
         <div className="local-grid">
           <article><span>01</span><h3>지역 혜택</h3><p>굿뜨래페이 사용 가능 매장과 지역 혜택 정보를 준비하고 있습니다.</p></article>
           <article><span>02</span><h3>예약 문의</h3><p>숙소와 체험, 로컬 투어를 간단히 문의할 수 있도록 확장합니다.</p></article>
@@ -280,9 +321,7 @@ function LocalSection() {
           <strong>아직 공식 협의 전 단계입니다.</strong>
           <p>현재 결제·예약 확정·공식 지역화폐 연동 기능은 제공하지 않습니다.</p>
         </div>
-        <button type="button" className="gold-button" onClick={() => window.alert('제휴 및 예약 문의 기능은 다음 단계에서 추가될 예정입니다.')}>
-          파트너 안내 받기 <Arrow />
-        </button>
+        <a className="gold-button" href="/features.html">준비 중인 기능 보기 <Arrow /></a>
       </div>
     </section>
   )
@@ -290,17 +329,37 @@ function LocalSection() {
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer snap-page" id="information">
       <div className="footer-top">
-        <p className="footer-kicker">A JOURNEY TO THE LAST LIGHT OF BAEKJE</p>
+        <p className="footer-kicker">백제의 마지막 빛을 따라가는 여행</p>
         <h2>오래된 도시를<br /><em>새롭게 여행하는 법.</em></h2>
         <a href="#top" className="back-top">처음으로 <span>↑</span></a>
       </div>
+      <div className="footer-information">
+        <article>
+          <span>01 · 소개</span>
+          <h3>사비로 소개</h3>
+          <p>사비로는 백제의 마지막 수도 부여를 오늘의 감각으로 다시 읽는 독립 여행 큐레이션 프로젝트입니다. 검증된 역사·장소 정보와 직접 설계한 여행 흐름을 차근히 축적합니다.</p>
+          <a href="/about.html">사이트 운영 원칙 자세히 보기 <Arrow /></a>
+        </article>
+        <article>
+          <span>02 · 기능</span>
+          <h3>제공·준비 기능</h3>
+          <p>현재 여행 코스와 대표 장소를 소개하며, 향후 장소 탐색·예약 문의·지역 혜택 안내를 준비합니다. 아직 결제, 예약 확정, 공식 지역화폐 연동은 제공하지 않습니다.</p>
+          <a href="/features.html">기능과 책임 범위 확인하기 <Arrow /></a>
+        </article>
+        <article>
+          <span>03 · 개인정보</span>
+          <h3>개인정보와 광고</h3>
+          <p>현재 회원가입이나 문의 정보를 수집하지 않습니다. 향후 광고 도입 시 Google 등 제3자 사업자가 쿠키를 사용할 수 있으며, 관련 내용과 선택권을 개인정보처리방침에 투명하게 고지합니다.</p>
+          <a href="/privacy.html">개인정보처리방침 읽기 <Arrow /></a>
+        </article>
+      </div>
       <div className="footer-bottom">
-        <a className="footer-brand" href="#top"><span>扶</span><strong>부여GO</strong></a>
+        <a className="footer-brand" href="#top"><BrandSymbol /><span><strong>사비로</strong><small>부여 여행 큐레이션</small></span></a>
         <p>부여 여행을 더 깊고 쉽게 만들기 위한 개인 프로젝트 MVP입니다.<br />공식 관광·결제 서비스가 아니며 정보는 검증 후 순차적으로 업데이트됩니다.</p>
-        <p className="credits">PHOTOGRAPHY · WIKIMEDIA COMMONS<br />각 이미지의 저작자와 라이선스는 슬라이드에 표기했습니다.</p>
-        <p className="copyright">© 2026 BUYEOGO<br />ALL RIGHTS RESERVED.</p>
+        <p className="credits">사진 출처 · 위키미디어 공용<br />각 이미지의 저작자와 이용 조건은 슬라이드에 표기했습니다.</p>
+        <p className="copyright">© 2026 사비로<br />최종 수정 · 2026.06.19</p>
       </div>
     </footer>
   )
@@ -311,13 +370,72 @@ function MobileNav() {
     <nav className="mobile-nav" aria-label="모바일 메뉴">
       <a href="#top"><span>○</span>홈</a>
       <a href="#journeys"><span>⌁</span>코스</a>
-      <button type="button" onClick={() => window.alert('예약 문의 기능은 곧 추가될 예정입니다.')}><span>◇</span>문의</button>
+      <a href="/about.html#contact"><span>◇</span>문의</a>
       <a href="#local"><span>＋</span>혜택</a>
     </nav>
   )
 }
 
+function useGuidedScroll() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let locked = false
+    let unlockTimer = 0
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey || locked || Math.abs(event.deltaY) < 4) return
+
+      const pages = Array.from(document.querySelectorAll<HTMLElement>('.snap-page'))
+      const viewportAnchor = window.scrollY + window.innerHeight * 0.35
+      let currentIndex = pages.findIndex((page) => {
+        const top = page.offsetTop
+        return viewportAnchor >= top && viewportAnchor < top + page.offsetHeight
+      })
+
+      if (currentIndex < 0) {
+        currentIndex = pages.reduce((closest, page, index) => (
+          Math.abs(page.offsetTop - window.scrollY) < Math.abs(pages[closest].offsetTop - window.scrollY)
+            ? index
+            : closest
+        ), 0)
+      }
+
+      const currentPage = pages[currentIndex]
+      const isLongPage = currentPage.classList.contains('snap-page-long')
+
+      if (isLongPage) {
+        const pageTop = currentPage.offsetTop
+        const pageBottom = pageTop + currentPage.offsetHeight - window.innerHeight
+        const canMoveInside = event.deltaY > 0
+          ? window.scrollY < pageBottom - 6
+          : window.scrollY > pageTop + 6
+
+        if (canMoveInside) return
+      }
+
+      const targetIndex = currentIndex + (event.deltaY > 0 ? 1 : -1)
+      const target = pages[targetIndex]
+      if (!target) return
+
+      event.preventDefault()
+      locked = true
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      window.clearTimeout(unlockTimer)
+      unlockTimer = window.setTimeout(() => { locked = false }, 900)
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => {
+      window.removeEventListener('wheel', onWheel)
+      window.clearTimeout(unlockTimer)
+    }
+  }, [])
+}
+
 export default function App() {
+  useGuidedScroll()
+
   return (
     <main>
       <Hero />

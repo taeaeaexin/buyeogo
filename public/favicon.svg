@@ -1,17 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="bg" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#285f50"/>
-      <stop offset="1" stop-color="#15382f"/>
+    <linearGradient id="night" x1="8" y1="5" x2="56" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#24231f"/>
+      <stop offset="1" stop-color="#090908"/>
     </linearGradient>
-    <linearGradient id="gold" x1="18" y1="15" x2="46" y2="49" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#f5d487"/>
-      <stop offset="1" stop-color="#b98232"/>
+    <linearGradient id="metal" x1="17" y1="14" x2="47" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ead18d"/>
+      <stop offset="1" stop-color="#9b7840"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="18" fill="url(#bg)"/>
-  <circle cx="32" cy="32" r="22" fill="none" stroke="#f5d487" stroke-opacity=".28"/>
-  <path d="M18 37.5c8.5-2.3 19.5-2.3 28 0M21 42c6.7-1.8 15.3-1.8 22 0" fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-width="2.6"/>
-  <path d="M25 34V23.5h14V34M22 23.5h20l-3.5-4h-13L22 23.5Z" fill="none" stroke="url(#gold)" stroke-linejoin="round" stroke-width="2.8"/>
-  <circle cx="32" cy="15.5" r="2.5" fill="#f5d487"/>
+  <rect width="64" height="64" rx="15" fill="url(#night)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#ead18d" stroke-opacity=".26"/>
+  <path d="M24 18h16M20 24h24M24 30h16M27 36h10" fill="none" stroke="url(#metal)" stroke-linecap="round" stroke-width="2.4"/>
+  <path d="M12 44c7-3.8 13.3-3.8 19 0s12 3.8 21 0" fill="none" stroke="#f2eee3" stroke-linecap="round" stroke-width="2.2"/>
 </svg>
