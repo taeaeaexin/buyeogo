@@ -105,9 +105,9 @@ const routes = [
 function BrandSymbol({ className = '' }: { className?: string }) {
   return (
     <svg className={`brand-symbol ${className}`} viewBox="0 0 48 48" aria-hidden="true">
-      <path className="symbol-frame" d="M24 2.5C35.9 2.5 45.5 12.1 45.5 24S35.9 45.5 24 45.5 2.5 35.9 2.5 24 12.1 2.5 24 2.5Z" />
-      <path className="symbol-stone" d="M18 16h12M15.5 20.5h17M18.5 25h11M21 29.5h6" />
-      <path className="symbol-river" d="M10.5 34.5c5-2.8 9.4-2.8 13.5 0s8.5 2.8 13.5 0" />
+      <circle className="symbol-frame" cx="24" cy="24" r="21.5" />
+      <path className="symbol-route" d="M10.5 29.5c5.4-4.1 10.4-4.1 15 0s9.7 4.1 14.2 0" />
+      <circle className="symbol-point" cx="24" cy="17" r="2.4" />
     </svg>
   )
 }
@@ -120,29 +120,29 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   )
 }
 
-function Header() {
+function Header({ onOpenService }: { onOpenService: () => void }) {
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="사비로 처음으로">
+      <a className="brand" href="/" aria-label="부여로 처음으로">
         <BrandSymbol />
         <span className="brand-word">
-          <strong>사비로</strong>
+          <strong>부여로</strong>
           <small>부여 여행 큐레이션</small>
         </span>
       </a>
       <nav className="desktop-nav" aria-label="주요 메뉴">
-        <a href="#story">사비의 서사</a>
-        <a href="#journeys">여행 코스</a>
-        <a href="#local">지역 안내</a>
+        <a href="/">부여를 걷다</a>
+        <a href="/tales">사비의 옛이야기</a>
+        <a href="/maker">만든 이의 기록</a>
       </nav>
-      <a className="header-cta" href="#journeys">
+      <button className="header-cta" type="button" onClick={onOpenService}>
         여행 시작하기 <Arrow diagonal />
-      </a>
+      </button>
     </header>
   )
 }
 
-function Hero() {
+function Hero({ onOpenService }: { onOpenService: () => void }) {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
 
@@ -163,7 +163,7 @@ function Hero() {
       aria-roledescription="carousel"
       aria-label="부여의 네 장면"
     >
-      <Header />
+      <Header onOpenService={onOpenService} />
       <div className="hero-images" aria-live="off">
         {scenes.map((item, index) => (
           <figure className={`hero-image ${index === active ? 'is-active' : ''}`} key={item.era}>
@@ -203,7 +203,10 @@ function Hero() {
             ><span /></button>
           ))}
         </div>
-        <a href="#story" className="scroll-cue">다음 장면 <span>↓</span></a>
+        <button className="hero-service-button" type="button" onClick={onOpenService}>
+          <span><small>부여 여행 서비스</small>여행 시작하기</span>
+          <Arrow diagonal />
+        </button>
       </div>
     </section>
   )
@@ -310,8 +313,8 @@ function LocalSection() {
     <section className="local snap-page" id="local">
       <div className="local-image" role="img" aria-label="백제문화단지의 전경" />
       <div className="local-panel">
-        <p className="eyebrow">사비로 · 다음 이야기</p>
-        <h2>여행의 다음 장면까지<br />사비로가 준비합니다.</h2>
+        <p className="eyebrow">부여로 · 다음 이야기</p>
+        <h2>여행의 다음 장면까지<br />부여로가 준비합니다.</h2>
         <div className="local-grid">
           <article><span>01</span><h3>지역 혜택</h3><p>굿뜨래페이 사용 가능 매장과 지역 혜택 정보를 준비하고 있습니다.</p></article>
           <article><span>02</span><h3>예약 문의</h3><p>숙소와 체험, 로컬 투어를 간단히 문의할 수 있도록 확장합니다.</p></article>
@@ -338,8 +341,8 @@ function Footer() {
       <div className="footer-information">
         <article>
           <span>01 · 소개</span>
-          <h3>사비로 소개</h3>
-          <p>사비로는 백제의 마지막 수도 부여를 오늘의 감각으로 다시 읽는 독립 여행 큐레이션 프로젝트입니다. 검증된 역사·장소 정보와 직접 설계한 여행 흐름을 차근히 축적합니다.</p>
+          <h3>부여로 소개</h3>
+          <p>부여로는 백제의 마지막 수도 부여를 오늘의 감각으로 다시 읽는 독립 여행 큐레이션 프로젝트입니다. 검증된 역사·장소 정보와 직접 설계한 여행 흐름을 차근히 축적합니다.</p>
           <a href="/about.html">사이트 운영 원칙 자세히 보기 <Arrow /></a>
         </article>
         <article>
@@ -356,10 +359,10 @@ function Footer() {
         </article>
       </div>
       <div className="footer-bottom">
-        <a className="footer-brand" href="#top"><BrandSymbol /><span><strong>사비로</strong><small>부여 여행 큐레이션</small></span></a>
+        <a className="footer-brand" href="#top"><BrandSymbol /><span><strong>부여로</strong><small>부여 여행 큐레이션</small></span></a>
         <p>부여 여행을 더 깊고 쉽게 만들기 위한 개인 프로젝트 MVP입니다.<br />공식 관광·결제 서비스가 아니며 정보는 검증 후 순차적으로 업데이트됩니다.</p>
         <p className="credits">사진 출처 · 위키미디어 공용<br />각 이미지의 저작자와 이용 조건은 슬라이드에 표기했습니다.</p>
-        <p className="copyright">© 2026 사비로<br />최종 수정 · 2026.06.19</p>
+        <p className="copyright">© 2026 부여로<br />최종 수정 · 2026.06.19</p>
       </div>
     </footer>
   )
@@ -376,9 +379,120 @@ function MobileNav() {
   )
 }
 
+function ServiceGate({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    document.body.classList.add('dialog-open')
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.classList.remove('dialog-open')
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onClose])
+
+  return (
+    <div className="service-gate" role="dialog" aria-modal="true" aria-labelledby="service-gate-title">
+      <button className="service-gate-backdrop" type="button" onClick={onClose} aria-label="준비중 안내 닫기" />
+      <div className="service-gate-panel">
+        <button className="service-gate-close" type="button" onClick={onClose} aria-label="닫기">×</button>
+        <p className="eyebrow">부여 여행 서비스</p>
+        <h2 id="service-gate-title">진짜 여행은<br />여기서 시작됩니다.</h2>
+        <p>취향과 일정에 맞는 코스, 장소 정보와 지역 경험을 하나로 잇는 별도 서비스를 준비하고 있습니다.</p>
+        <div className="service-gate-status"><span />현재 정식 공개를 준비하고 있습니다.</div>
+        <button type="button" onClick={onClose}>조금만 기다려주세요</button>
+      </div>
+    </div>
+  )
+}
+
+function SubpageHeader() {
+  return (
+    <header className="subpage-header">
+      <a className="brand" href="/" aria-label="부여로 처음으로"><BrandSymbol /><span className="brand-word"><strong>부여로</strong><small>부여 여행 큐레이션</small></span></a>
+      <nav aria-label="콘텐츠 메뉴"><a href="/">부여를 걷다</a><a href="/tales">사비의 옛이야기</a><a href="/maker">만든 이의 기록</a></nav>
+    </header>
+  )
+}
+
+const taleChapters = [
+  {
+    number: '첫 번째 이야기',
+    title: '꽃처럼 떨어진\n사람들의 이름',
+    subtitle: '낙화암과 삼천궁녀',
+    body: '백제가 무너지던 날의 슬픔은 오랜 세월을 지나 ‘삼천궁녀’라는 이야기로 전해졌습니다. 그러나 삼천이라는 숫자와 궁녀의 이야기는 후대에 덧입혀진 상징으로 보는 시선도 있습니다.',
+    note: '기록과 전설 사이에서, 우리는 이름 없이 사라진 사람들을 먼저 기억합니다.',
+    image: '/buyeo-assets/slide-busosanseong.jpg',
+  },
+  {
+    number: '두 번째 이야기',
+    title: '노래가 데려온\n두 사람의 인연',
+    subtitle: '서동과 선화공주',
+    body: '마를 캐던 서동은 아이들에게 노래를 퍼뜨려 신라의 선화공주와 인연을 맺었다고 전해집니다. 사랑과 야심, 왕이 되는 이야기가 짧은 노래 한 수에 담겼습니다.',
+    note: '서동요는 역사와 설화가 맞닿는 자리에서 지금도 새롭게 읽힙니다.',
+    image: '/buyeo-assets/slide-gungnamji.jpg',
+  },
+  {
+    number: '다음 이야기',
+    title: '부여의 밤에는\n아직 이야기가 많습니다.',
+    subtitle: '이야기 서재 준비중',
+    body: '백제금동대향로, 의자왕, 백마강과 용의 전설까지. 자료를 확인하고 한 장씩 천천히 펼쳐 보이겠습니다.',
+    note: '이 페이지는 동화책처럼 넘기는 설화 콘텐츠의 초기 목업입니다.',
+    image: '/buyeo-assets/slide-jeongnimsa.jpg',
+  },
+]
+
+function TalesPage() {
+  return (
+    <main className="tales-page">
+      <SubpageHeader />
+      <section className="tale-cover snap-page">
+        <p>부여로 이야기 서재</p><h1>사비의<br />옛이야기</h1><span>기록과 전설 사이, 오래된 목소리를 따라갑니다.</span>
+      </section>
+      {taleChapters.map((chapter) => (
+        <section className="tale-chapter snap-page" key={chapter.number}>
+          <img src={chapter.image} alt="" />
+          <div className="tale-shade" />
+          <div className="tale-copy"><p>{chapter.number} · {chapter.subtitle}</p><h2>{chapter.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h2><div><p>{chapter.body}</p><small>{chapter.note}</small></div></div>
+        </section>
+      ))}
+    </main>
+  )
+}
+
+function MakerPage() {
+  return (
+    <main className="maker-page">
+      <SubpageHeader />
+      <section className="maker-cover snap-page"><p>만든 이의 기록</p><h1>도시를 좋아하는 마음이<br />하나의 화면이 되기까지.</h1><span>이곳에는 부여로를 만든 개발자의 이야기가 채워질 예정입니다.</span></section>
+      <section className="maker-notes snap-page">
+        <div className="maker-sticky"><p>개발 기록 · 목업</p><h2>무엇을,<br />왜 만들었나.</h2></div>
+        <div className="maker-list">
+          <article><span>01</span><h3>부여를 다시 보게 된 순간</h3><p>프로젝트를 시작하게 된 개인적인 계기와 부여에서 발견한 첫 장면을 기록할 자리입니다.</p></article>
+          <article><span>02</span><h3>관광 정보보다 여행의 흐름</h3><p>정보를 나열하지 않고 하나의 감정과 동선으로 설계한 이유를 풀어낼 자리입니다.</p></article>
+          <article><span>03</span><h3>만들면서 배운 것들</h3><p>디자인과 개발의 시행착오, 앞으로 만들 서비스에 대한 생각을 이어갈 자리입니다.</p></article>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function usePageMetadata(title: string, description: string, path: string) {
+  useEffect(() => {
+    document.title = title
+    const descriptionTag = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    const canonicalTag = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+    if (descriptionTag) descriptionTag.content = description
+    if (canonicalTag) canonicalTag.href = `https://buyeogo.pages.dev${path}`
+  }, [description, path, title])
+}
+
 function useGuidedScroll() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.matchMedia('(max-width: 760px)').matches) return
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
 
     let locked = false
     let unlockTimer = 0
@@ -435,16 +549,30 @@ function useGuidedScroll() {
 
 export default function App() {
   useGuidedScroll()
+  const [serviceOpen, setServiceOpen] = useState(false)
+  const path = window.location.pathname.replace(/\/$/, '') || '/'
+
+  const metadata = path === '/tales'
+    ? ['사비의 옛이야기 | 부여로', '부여에 전해지는 설화를 기록과 전설 사이에서 읽는 이야기 서재입니다.', '/tales']
+    : path === '/maker'
+      ? ['만든 이의 기록 | 부여로', '부여로를 만든 개발자의 생각과 제작 과정을 기록할 개인 페이지입니다.', '/maker']
+      : ['부여로 | 백제의 마지막 수도, 부여를 걷는 여행', '부여로는 백제의 마지막 수도 부여를 깊게 여행하는 독립 큐레이션입니다.', '/']
+
+  usePageMetadata(metadata[0], metadata[1], metadata[2])
+
+  if (path === '/tales') return <TalesPage />
+  if (path === '/maker') return <MakerPage />
 
   return (
     <main>
-      <Hero />
+      <Hero onOpenService={() => setServiceOpen(true)} />
       <Story />
       <Chapters />
       <Journeys />
       <LocalSection />
       <Footer />
       <MobileNav />
+      {serviceOpen && <ServiceGate onClose={() => setServiceOpen(false)} />}
     </main>
   )
 }
