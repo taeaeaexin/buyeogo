@@ -53,6 +53,12 @@ a {
   cursor: pointer;
 }
 
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
 .icon {
   width: 20px;
   height: 20px;
@@ -282,6 +288,10 @@ a {
   color: var(--white);
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
+}
+
+.button-ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .slider-footer {
@@ -748,6 +758,171 @@ a {
   line-height: 1.65;
 }
 
+.experience-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(11, 17, 15, 0.56);
+  backdrop-filter: blur(12px);
+  animation: panel-fade-in 180ms ease;
+}
+
+.experience-panel {
+  width: min(100%, 760px);
+  max-height: calc(100svh - 48px);
+  overflow: auto;
+  border: 1px solid rgba(81, 72, 55, 0.16);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top left, rgba(191, 156, 107, 0.12), transparent 28%),
+    linear-gradient(180deg, #f8f2e9 0%, #fcfaf6 54%, #f4eee4 100%);
+  box-shadow: 0 32px 90px rgba(12, 21, 17, 0.24);
+}
+
+.experience-panel-shell {
+  position: relative;
+  padding: 32px;
+}
+
+.panel-eyebrow {
+  margin: 0;
+  color: #8d6c3d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.panel-close {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  min-width: 58px;
+  min-height: 40px;
+  border: 1px solid rgba(91, 82, 66, 0.16);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: #40362c;
+  background: rgba(255, 255, 255, 0.74);
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.panel-close:hover {
+  background: rgba(255, 255, 255, 0.92);
+  transform: translateY(-1px);
+}
+
+.experience-panel h2 {
+  margin: 16px 72px 0 0;
+  color: #201d19;
+  font-size: clamp(30px, 4.2vw, 42px);
+  font-weight: 760;
+  line-height: 1.28;
+  word-break: keep-all;
+}
+
+.panel-description {
+  margin: 18px 0 0;
+  color: #5d625c;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.panel-action-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.panel-action-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+  width: 100%;
+  min-height: 122px;
+  border: 1px solid rgba(95, 91, 79, 0.12);
+  border-radius: 20px;
+  padding: 20px;
+  color: #201d19;
+  background: rgba(255, 255, 255, 0.82);
+  text-align: left;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.panel-action-card:hover {
+  border-color: rgba(23, 79, 62, 0.18);
+  background: rgba(255, 255, 255, 0.94);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(33, 44, 38, 0.08);
+}
+
+.panel-action-card span,
+.panel-action-card strong,
+.panel-action-card small {
+  display: block;
+}
+
+.panel-action-card strong {
+  font-size: 17px;
+  font-weight: 760;
+}
+
+.panel-action-card small {
+  margin-top: 7px;
+  color: #666660;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.panel-action-card > .icon {
+  margin-top: 2px;
+  color: var(--green);
+}
+
+.panel-meta {
+  margin-top: 22px;
+  border-top: 1px solid rgba(95, 91, 79, 0.12);
+  padding-top: 18px;
+}
+
+.panel-meta strong {
+  color: #40362c;
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.panel-meta p,
+.panel-note {
+  margin: 8px 0 0;
+  color: #666660;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.panel-note {
+  border-left: 2px solid rgba(141, 108, 61, 0.34);
+  padding-left: 14px;
+}
+
+@keyframes panel-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .bottom-nav {
   display: none;
 }
@@ -981,6 +1156,39 @@ a {
 
   .site-footer {
     padding-bottom: 110px;
+  }
+
+  .experience-panel-backdrop {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .experience-panel {
+    width: 100%;
+    max-height: calc(100svh - 12px);
+    border-radius: 26px 26px 0 0;
+  }
+
+  .experience-panel-shell {
+    padding: 24px 20px 28px;
+  }
+
+  .panel-close {
+    top: 18px;
+    right: 18px;
+  }
+
+  .experience-panel h2 {
+    margin-right: 64px;
+    font-size: clamp(28px, 8vw, 34px);
+  }
+
+  .panel-description {
+    font-size: 14px;
+  }
+
+  .panel-action-group {
+    grid-template-columns: 1fr;
   }
 
   .bottom-nav {

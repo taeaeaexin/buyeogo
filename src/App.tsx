@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 type IconName =
@@ -19,6 +19,23 @@ type Slide = {
   imageAlt: string
   objectPosition?: string
   credit: string
+}
+
+type PanelKey = 'course' | 'reservation' | 'places' | 'contact' | 'partner'
+
+type PanelAction = {
+  label: string
+  description: string
+  targetId: 'top' | 'courses' | 'benefits' | 'partner'
+}
+
+type PanelContent = {
+  eyebrow: string
+  title: string
+  description: string
+  actions: PanelAction[]
+  upcoming: string
+  note?: string
 }
 
 const slides: Slide[] = [
@@ -108,6 +125,107 @@ const courses = [
   },
 ]
 
+const panelContent: Record<PanelKey, PanelContent> = {
+  course: {
+    eyebrow: 'COURSE PREVIEW',
+    title: '코스 상세는 여행 흐름부터 차근히 다듬고 있습니다.',
+    description:
+      '현재는 핵심 동선과 분위기를 먼저 보여드리고 있습니다. 상세 일정, 소요 시간, 동선 지도는 검증 후 순차적으로 추가할 예정입니다.',
+    actions: [
+      {
+        label: '추천 코스 비교하기',
+        description: '세 가지 여행 흐름을 다시 보고 취향에 맞는 방향을 고릅니다.',
+        targetId: 'courses',
+      },
+      {
+        label: '지역 혜택 준비 보기',
+        description: '매장·혜택 정보가 어떤 방식으로 연결될지 먼저 확인합니다.',
+        targetId: 'benefits',
+      },
+    ],
+    upcoming: '코스별 시간표, 걷기 난이도, 우천 대안 안내를 다음 단계에서 보강합니다.',
+  },
+  reservation: {
+    eyebrow: 'RESERVATION',
+    title: '예약 문의는 준비 중이지만 다음 탐색은 바로 이어갈 수 있습니다.',
+    description:
+      '아직 숙소·체험 예약을 직접 연결하지는 않습니다. 대신 현재 둘러볼 수 있는 코스와 제휴 안내를 먼저 정리해 두었습니다.',
+    actions: [
+      {
+        label: '추천 코스 살펴보기',
+        description: '여행 성격에 맞는 기본 동선을 먼저 비교합니다.',
+        targetId: 'courses',
+      },
+      {
+        label: '제휴 안내 보기',
+        description: '숙소·식당·체험 업체와 어떤 방식으로 연결될지 확인합니다.',
+        targetId: 'partner',
+      },
+    ],
+    upcoming: '문의 폼과 응답 흐름은 운영 기준이 정리된 뒤 추가할 예정입니다.',
+    note: '부여GO는 현재 공식 예약 플랫폼이나 공공 제휴 서비스가 아닙니다.',
+  },
+  places: {
+    eyebrow: 'LOCAL PLACES',
+    title: '장소 탐색은 로컬 큐레이션부터 신중하게 준비하고 있습니다.',
+    description:
+      '명소, 식당, 카페, 숙소를 한 화면에서 찾을 수 있도록 설계 중입니다. 지금은 먼저 여행 흐름과 지역 혜택 구조를 살펴보는 편이 가장 정확합니다.',
+    actions: [
+      {
+        label: '추천 코스 보기',
+        description: '대표 장소들이 어떤 순서로 이어지는지 먼저 확인합니다.',
+        targetId: 'courses',
+      },
+      {
+        label: '지역 혜택 구조 보기',
+        description: '매장 정보와 여행 혜택이 어떻게 연결될지 확인합니다.',
+        targetId: 'benefits',
+      },
+    ],
+    upcoming: '장소 필터, 지도 기반 탐색, 운영 시간 검증은 이후 단계에서 추가합니다.',
+  },
+  contact: {
+    eyebrow: 'CONTACT',
+    title: '문의 창구는 아직 열리지 않았지만 준비 방향은 공개되어 있습니다.',
+    description:
+      '여행자 문의와 지역 업체 제휴 문의를 분리해 안내할 계획입니다. 운영 범위가 확정되기 전까지는 오해가 없도록 준비 상태만 먼저 보여드립니다.',
+    actions: [
+      {
+        label: '제휴 안내 보기',
+        description: '지역 업체와 연결하려는 현재 방향을 확인합니다.',
+        targetId: 'partner',
+      },
+      {
+        label: '혜택 준비 보기',
+        description: '결제·혜택 정보가 공식 연동 없이 어떻게 안내될지 살펴봅니다.',
+        targetId: 'benefits',
+      },
+    ],
+    upcoming: '문의 유형별 접수 방식과 답변 기준이 정리되면 별도 창구를 열 예정입니다.',
+    note: '현재는 공식 고객센터나 행정기관 문의 채널을 대체하지 않습니다.',
+  },
+  partner: {
+    eyebrow: 'WITH LOCAL',
+    title: '제휴 신청은 준비 중이며 소개 기준부터 먼저 다듬고 있습니다.',
+    description:
+      '숙소, 식당, 카페, 체험 업체를 여행자와 연결하려면 정보 정확도와 소개 기준이 먼저 필요합니다. 현재는 운영 방향만 공개하고 있습니다.',
+    actions: [
+      {
+        label: '지역 혜택 준비 보기',
+        description: '매장 정보와 여행 혜택을 어떤 구조로 보여줄지 확인합니다.',
+        targetId: 'benefits',
+      },
+      {
+        label: '맨 위로 돌아가기',
+        description: '전체 분위기와 핵심 메시지를 다시 확인합니다.',
+        targetId: 'top',
+      },
+    ],
+    upcoming: '제휴 신청 폼은 검수 기준과 운영 책임 범위가 정리된 뒤 공개합니다.',
+    note: '현 단계에서는 공식 제휴 확정이나 결제 연동을 의미하지 않습니다.',
+  },
+}
+
 function Icon({ name }: { name: IconName }) {
   return (
     <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -171,7 +289,13 @@ function Header() {
   )
 }
 
-function HeroSlider() {
+function HeroSlider({
+  onNavigate,
+  onOpenPanel,
+}: {
+  onNavigate: (targetId: PanelAction['targetId']) => void
+  onOpenPanel: (panel: PanelKey) => void
+}) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
 
@@ -229,19 +353,11 @@ function HeroSlider() {
           </h1>
           <p className="hero-description">{slides[activeIndex].subtitle}</p>
           <div className="hero-actions">
-            <button
-              className="button button-primary"
-              type="button"
-              onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <button className="button button-primary" type="button" onClick={() => onNavigate('courses')}>
               여행 코스 보기
               <Icon name="arrowRight" />
             </button>
-            <button
-              className="button button-ghost"
-              type="button"
-              onClick={() => window.alert('예약 문의 기능은 다음 단계에서 추가될 예정입니다.')}
-            >
+            <button className="button button-ghost" type="button" onClick={() => onOpenPanel('reservation')}>
               예약 문의 준비중
             </button>
           </div>
@@ -279,7 +395,13 @@ function HeroSlider() {
   )
 }
 
-function ServiceMenu() {
+function ServiceMenu({
+  onNavigate,
+  onOpenPanel,
+}: {
+  onNavigate: (targetId: PanelAction['targetId']) => void
+  onOpenPanel: (panel: PanelKey) => void
+}) {
   return (
     <section className="service-menu" aria-label="부여GO 주요 서비스">
       <div className="content-width service-grid">
@@ -287,7 +409,14 @@ function ServiceMenu() {
           <button
             type="button"
             key={service.title}
-            onClick={() => window.alert(`${service.title} 기능은 준비중입니다.`)}
+            onClick={() => {
+              if (service.icon === 'route') {
+                onNavigate('courses')
+                return
+              }
+
+              onOpenPanel(service.icon === 'map' ? 'places' : 'reservation')
+            }}
           >
             <span className="service-icon"><Icon name={service.icon} /></span>
             <span>
@@ -302,7 +431,7 @@ function ServiceMenu() {
   )
 }
 
-function CourseSection() {
+function CourseSection({ onOpenPanel }: { onOpenPanel: (panel: PanelKey) => void }) {
   return (
     <section className="section course-section" id="courses">
       <div className="content-width">
@@ -326,10 +455,7 @@ function CourseSection() {
                 <h3>{course.title}</h3>
                 <p>{course.description}</p>
                 <div className="route-line"><Icon name="route" /> {course.route}</div>
-                <button
-                  type="button"
-                  onClick={() => window.alert('코스 상세 페이지는 다음 단계에서 추가될 예정입니다.')}
-                >
+                <button type="button" onClick={() => onOpenPanel('course')}>
                   코스 미리보기 <Icon name="arrowRight" />
                 </button>
               </div>
@@ -366,7 +492,7 @@ function BenefitsSection() {
   )
 }
 
-function PartnerSection() {
+function PartnerSection({ onOpenPanel }: { onOpenPanel: (panel: PanelKey) => void }) {
   return (
     <section className="partner-section" id="partner">
       <img src="/buyeo-assets/slide-busosanseong.jpg" alt="낙화암에서 본 백마강" />
@@ -375,11 +501,7 @@ function PartnerSection() {
         <p className="eyebrow">WITH LOCAL</p>
         <h2>부여의 좋은 가게와 경험을<br />함께 소개하고 싶습니다.</h2>
         <p>숙소, 식당, 카페, 체험 업체를 여행자와 연결할 준비를 하고 있습니다.</p>
-        <button
-          className="button button-light"
-          type="button"
-          onClick={() => window.alert('제휴 신청 기능은 다음 단계에서 추가될 예정입니다.')}
-        >
+        <button className="button button-light" type="button" onClick={() => onOpenPanel('partner')}>
           제휴 신청 준비중 <Icon name="arrowRight" />
         </button>
       </div>
@@ -413,27 +535,139 @@ function Footer() {
   )
 }
 
-function BottomNavigation() {
+function BottomNavigation({ onOpenPanel }: { onOpenPanel: (panel: PanelKey) => void }) {
   return (
     <nav className="bottom-nav" aria-label="모바일 주요 메뉴">
       <a href="#top" aria-current="page"><Icon name="home" /><span>홈</span></a>
       <a href="#courses"><Icon name="route" /><span>코스</span></a>
-      <button type="button" onClick={() => window.alert('장소 기능은 준비중입니다.')}><Icon name="map" /><span>장소</span></button>
-      <button type="button" onClick={() => window.alert('문의 기능은 준비중입니다.')}><Icon name="message" /><span>문의</span></button>
+      <button type="button" onClick={() => onOpenPanel('places')}><Icon name="map" /><span>장소</span></button>
+      <button type="button" onClick={() => onOpenPanel('contact')}><Icon name="message" /><span>문의</span></button>
     </nav>
   )
 }
 
+function ExperiencePanel({
+  panelKey,
+  onClose,
+  onNavigate,
+}: {
+  panelKey: PanelKey | null
+  onClose: () => void
+  onNavigate: (targetId: PanelAction['targetId']) => void
+}) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!panelKey) {
+      return undefined
+    }
+
+    const previousOverflow = document.body.style.overflow
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeyDown)
+    closeButtonRef.current?.focus()
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [onClose, panelKey])
+
+  if (!panelKey) {
+    return null
+  }
+
+  const panel = panelContent[panelKey]
+
+  return (
+    <div className="experience-panel-backdrop" onClick={onClose}>
+      <section
+        className="experience-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="experience-panel-title"
+        aria-describedby="experience-panel-description"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="experience-panel-shell">
+          <p className="panel-eyebrow">{panel.eyebrow}</p>
+          <button
+            className="panel-close"
+            type="button"
+            onClick={onClose}
+            aria-label="안내 패널 닫기"
+            ref={closeButtonRef}
+          >
+            닫기
+          </button>
+          <h2 id="experience-panel-title">{panel.title}</h2>
+          <p className="panel-description" id="experience-panel-description">
+            {panel.description}
+          </p>
+
+          <div className="panel-action-group">
+            {panel.actions.map((action) => (
+              <button
+                className="panel-action-card"
+                type="button"
+                key={action.label}
+                onClick={() => onNavigate(action.targetId)}
+              >
+                <span>
+                  <strong>{action.label}</strong>
+                  <small>{action.description}</small>
+                </span>
+                <Icon name="arrowRight" />
+              </button>
+            ))}
+          </div>
+
+          <div className="panel-meta">
+            <strong>다음 단계</strong>
+            <p>{panel.upcoming}</p>
+          </div>
+
+          {panel.note && <p className="panel-note">{panel.note}</p>}
+        </div>
+      </section>
+    </div>
+  )
+}
+
 function App() {
+  const [activePanel, setActivePanel] = useState<PanelKey | null>(null)
+
+  const handleNavigate = (targetId: PanelAction['targetId']) => {
+    setActivePanel(null)
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    document.getElementById(targetId)?.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  }
+
   return (
     <main>
-      <HeroSlider />
-      <ServiceMenu />
-      <CourseSection />
+      <HeroSlider onNavigate={handleNavigate} onOpenPanel={setActivePanel} />
+      <ServiceMenu onNavigate={handleNavigate} onOpenPanel={setActivePanel} />
+      <CourseSection onOpenPanel={setActivePanel} />
       <BenefitsSection />
-      <PartnerSection />
+      <PartnerSection onOpenPanel={setActivePanel} />
       <Footer />
-      <BottomNavigation />
+      <BottomNavigation onOpenPanel={setActivePanel} />
+      <ExperiencePanel
+        panelKey={activePanel}
+        onClose={() => setActivePanel(null)}
+        onNavigate={handleNavigate}
+      />
     </main>
   )
 }
