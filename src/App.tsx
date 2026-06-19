@@ -126,14 +126,16 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 type PageId = 'walk' | 'tales' | 'maker'
 
 const pageLinks = [
-  { id: 'walk' as PageId, no: '01', label: '부여를 걷다', href: '/' },
-  { id: 'tales' as PageId, no: '02', label: '사비의 옛이야기', href: '/tales' },
-  { id: 'maker' as PageId, no: '03', label: '만든 이의 기록', href: '/maker' },
+  { id: 'walk' as PageId, no: '01', label: '부여를 걷다', description: '장소와 시간으로 읽는 부여', href: '/' },
+  { id: 'tales' as PageId, no: '02', label: '사비의 옛이야기', description: '기록과 전설 사이의 이야기 서재', href: '/tales' },
+  { id: 'maker' as PageId, no: '03', label: '만든 이의 기록', description: '이 도시를 화면에 옮긴 과정', href: '/maker' },
 ]
 
-function GlobalHeader({ current, fixed = false, adaptive = false }: { current: PageId, fixed?: boolean, adaptive?: boolean }) {
+function GlobalHeader({ current, fixed = false, trail }: { current: PageId, fixed?: boolean, trail?: string }) {
+  const currentPage = pageLinks.find((item) => item.id === current) ?? pageLinks[0]
+
   return (
-    <header className={`site-header ${fixed ? 'is-fixed' : ''} ${adaptive ? 'is-adaptive' : ''}`}>
+    <header className={`site-header ${fixed ? 'is-fixed' : ''}`}>
       <a className="brand" href="/" aria-label="부여로 처음으로">
         <BrandSymbol />
         <span className="brand-word">
@@ -141,14 +143,24 @@ function GlobalHeader({ current, fixed = false, adaptive = false }: { current: P
           <small>부여 여행 큐레이션</small>
         </span>
       </a>
-      <nav className="page-nav" aria-label="독립 페이지 메뉴">
-        {pageLinks.map((item) => (
-          <a href={item.href} className={item.id === current ? 'is-current' : ''} aria-current={item.id === current ? 'page' : undefined} key={item.id}>
-            <small>{item.no}</small><span>{item.label}</span>{item.id !== current && <i aria-hidden="true">↗</i>}
-          </a>
-        ))}
-      </nav>
-      <p className="header-context"><span>3개의 독립 페이지</span><small>PAGE COLLECTION</small></p>
+      {trail && <div className="header-location" aria-label={`현재 위치: ${trail}`}>
+        <span>{currentPage.no}</span>
+        <p><small>{currentPage.label}</small><strong>{trail}</strong></p>
+      </div>}
+      <details className="page-switcher">
+        <summary><span>{trail ? '전체 목차' : currentPage.label}</span><i aria-hidden="true"><b /><b /></i></summary>
+        <div className="page-menu-panel">
+          <div className="page-menu-heading"><p>부여로의 세 장</p><h2>한 도시를 읽는<br /><em>세 가지 시선.</em></h2></div>
+          <nav aria-label="페이지 전체 목차">
+            {pageLinks.map((item) => (
+              <a href={item.href} className={item.id === current ? 'is-current' : ''} aria-current={item.id === current ? 'page' : undefined} key={item.id}>
+                <small>{item.no}</small><span><strong>{item.label}</strong><i>{item.description}</i></span><b aria-hidden="true">↗</b>
+              </a>
+            ))}
+          </nav>
+          <p className="page-menu-foot">BUYEORO · SABI 538—660 · 2026</p>
+        </div>
+      </details>
     </header>
   )
 }
@@ -215,8 +227,9 @@ function Hero({ onOpenService }: { onOpenService: () => void }) {
           ))}
         </div>
         <button className="hero-service-button" type="button" onClick={onOpenService}>
-          <span><small>별도 여행 서비스 · 준비중</small>여행 시작하기</span>
-          <Arrow diagonal />
+          <i className="service-orbit"><Arrow diagonal /></i>
+          <span><small>별도의 여행 설계 도구</small><strong>나만의 부여 여정</strong></span>
+          <em>준비 중</em>
         </button>
       </div>
     </section>
@@ -501,13 +514,15 @@ const taleDetails = {
 
 function TaleDetailPage({ slug }: { slug: keyof typeof taleDetails }) {
   const tale = taleDetails[slug]
+  const taleNumber = slug === 'nakhwaam' ? '01' : '02'
   return (
     <main className="tale-detail-page">
-      <GlobalHeader current="tales" fixed />
+      <GlobalHeader current="tales" fixed trail={`설화 ${taleNumber} · ${tale.label.split('·')[1].trim()}`} />
       <section className="tale-detail-cover snap-page">
         <img src={tale.cover} alt="" />
         <div className="tale-detail-shade" />
-        <div><p>{tale.label}</p><h1>{tale.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h1><blockquote>{tale.intro}</blockquote></div>
+        <div><p className="tale-breadcrumb"><a href="/tales">이야기 서재</a><span>／</span><b>설화 {taleNumber}</b><span>／</span>{tale.label.split('·')[1]}</p><h1>{tale.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h1><blockquote>{tale.intro}</blockquote></div>
+        <aside className="tale-position"><span>STORY POSITION</span><strong>{taleNumber}<i>／02</i></strong><a href="/tales">모든 이야기 보기 ↗</a></aside>
         <small>사진 · {tale.coverCredit}</small>
       </section>
       {tale.chapters.map((chapter) => (
@@ -528,7 +543,7 @@ function TaleDetailPage({ slug }: { slug: keyof typeof taleDetails }) {
 function MakerPage() {
   return (
     <main className="maker-page">
-      <GlobalHeader current="maker" fixed adaptive />
+      <GlobalHeader current="maker" fixed />
       <section className="maker-cover snap-page"><p>만든 이의 기록</p><h1>도시를 좋아하는 마음이<br />하나의 화면이 되기까지.</h1><span>이곳에는 부여로를 만든 개발자의 이야기가 채워질 예정입니다.</span></section>
       <section className="maker-notes snap-page">
         <div className="maker-sticky"><p>개발 기록 · 목업</p><h2>무엇을,<br />왜 만들었나.</h2></div>
